@@ -1,0 +1,56 @@
+User
+{
+	"_id": "6f5b8a8b-bfc7-4148-ad94-6b93b5ddce78",
+	"user_name": "user1",
+	"password": "user1Passwrd",
+	"profile": {
+		"email": "user1email@gmail.com",
+		"phone": "2012012001"
+	},
+	"comments": [
+		"7bd16251-10af-4729-bbdc-18b0c9d1a2a9"
+	],
+	"favorites": [
+		"d88c3d80-1d82-44b3-8978-9ab4e1429c98",
+		"48777632-b26a-4a4e-8637-810236b549c8"
+	]
+}
+
+
+Movie
+{
+	"_id": "d88c3d80-1d82-44b3-8978-9ab4e1429c98",
+	"name": "The Godfather",
+	"released_date": "March 24, 1972",
+	"actors": [
+		"Marlon Brando",
+		"Al Pacino",
+		"James Caan",
+		"Richard S. Castellano"
+	],
+	"director": "Francis Ford Coppola",
+	"genres": [
+		"Crime",
+		"Drama"
+	],
+	"rating": "R",
+	"avg_score": 5.0,
+	"gallerys": [
+		"./pic/godfather1",
+		"./pic/godfather2"
+	],
+	"comments": [
+		"7bd16251-10af-4729-bbdc-18b0c9d1a2a9",
+		"85722b29-061f-414d-a848-493b6e553b6a"
+	]
+}
+
+
+Comment
+{
+	"_id": "7bd16251-10af-4729-bbdc-18b0c9d1a2a9",
+	"user_id": "6f5b8a8b-bfc7-4148-ad94-6b93b5ddce78",
+	"movie_id": "d88c3d80-1d82-44b3-8978-9ab4e1429c98",
+	"user_score": 5,
+	"content": "A great movie"
+}
