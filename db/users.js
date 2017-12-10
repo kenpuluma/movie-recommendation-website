@@ -86,6 +86,11 @@ async function updateUser(id, updatedUser) {
         updatedUserData.favorites=updatedUser.favorites;
     }
 
+    let updateCommand={
+        $set:updatedUserData
+    };
+    await userCollection.updateOne({_id:id},updateCommand);
+    return await getUserById(id);
 }
 
 async function removeUser(id) {
