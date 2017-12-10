@@ -31,6 +31,44 @@ async function addMovie(title, released_date, director, rating, actors, genres) 
     return await getMovieById(movieId);
 }
 
+async function addActor(id, actor) {
+    if (typeof actor !== "string")
+        throw "Invalid actor";
+
+    const movieCollection = await movies();
+    const oldMovie = await getMovieById(id);
+
+    let updatedMovieData = {
+        actors: oldMovie.actors
+    };
+    updatedMovieData.actors.push(actor);
+
+    let updateCommand = {
+        $set: updatedMovieData
+    };
+    await movieCollection.updateOne({_id: id}, updateCommand);
+    return await getMovieById(id);
+}
+
+async function addGenre(id, genre) {
+    if (typeof genre !== "string")
+        throw "Invalid genre";
+
+    const movieCollection = await movies();
+    const oldMovie = await getMovieById(id);
+
+    let updatedMovieData = {
+        genres: oldMovie.genres
+    };
+    updatedMovieData.genres.push(genre);
+
+    let updateCommand = {
+        $set: updatedMovieData
+    };
+    await movieCollection.updateOne({_id: id}, updateCommand);
+    return await getMovieById(id);
+}
+
 async function addGallery(id, gallery_path) {
     if (typeof gallery_path !== "string")
         throw "Invalid path";
