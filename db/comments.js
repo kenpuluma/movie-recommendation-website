@@ -2,7 +2,7 @@ const uuidv4 = require("uuid/v4");
 const mongoCollections = require("mongoCollections");
 const comments = mongoCollections.comments;
 
-async function addComment(user_id, movie_id, user_score, content) {
+module.exports.addComment = async (user_id, movie_id, user_score, content) => {
     if (typeof user_id !== "string")
         throw "No user provided";
     if (typeof movie_id !== "string")
@@ -22,10 +22,10 @@ async function addComment(user_id, movie_id, user_score, content) {
     const newInsertInfo = await commentCollection.insertOne(newComment);
     const commentId = await newInsertInfo.insertedId;
 
-    return await getCommentById(commentId);
-}
+    return await this.getCommentById(commentId);
+};
 
-async function updateComment(id, updatedComment) {
+module.exports.updateComment = async (id, updatedComment) => {
     const commentCollection = await comments();
 
     let updatedCommentData = {};
@@ -40,26 +40,26 @@ async function updateComment(id, updatedComment) {
         $set: updatedCommentData
     };
     await commentCollection.updateOne({_id: id}, updateCommand);
-    return await getCommentById(id);
-}
+    return await this.getCommentById(id);
+};
 
-async function removeComment(id) {
+module.exports.removeComment = async (id) => {
     const commentCollection = await comments();
     const deleteInfo = await commentCollection.removeOne({_id: id});
     if (deleteInfo.deletedCount === 0) {
         throw `Could not delete comment ${id}`;
     }
-}
+};
 
-async function getAllComments() {
+module.exports.getAllComments = async () => {
     const commentCollection = comments();
     return await commentCollection.find().toArray();
-}
+};
 
-async function getCommentById(id) {
+module.exports.getCommentById = async (id) => {
     const commentCollection = comments();
     const comment = await commentCollection.findOne({_id: id});
     if (!comment)
         throw "Comment not found";
     return comment;
-}
+};

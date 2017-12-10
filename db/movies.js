@@ -3,7 +3,7 @@ const mongoCollections = require("mongoCollections");
 const movies = mongoCollections.movies;
 const comments = require("./comments");
 
-async function addMovie(title, released_date, director, rating, actors, genres) {
+module.exports.addMovie = async (title, released_date, director, rating, actors, genres) => {
     if (typeof title !== "string")
         throw "No title provided";
     if (!Array.isArray(actors))
@@ -28,15 +28,15 @@ async function addMovie(title, released_date, director, rating, actors, genres) 
     const newInsertInfo = await movieCollection.insertOne(newMovie);
     const movieId = await newInsertInfo.insertId;
 
-    return await getMovieById(movieId);
-}
+    return await this.getMovieById(movieId);
+};
 
-async function addActor(id, actor) {
+module.exports.addActor = async (id, actor) => {
     if (typeof actor !== "string")
         throw "Invalid actor";
 
     const movieCollection = await movies();
-    const oldMovie = await getMovieById(id);
+    const oldMovie = await this.getMovieById(id);
 
     let updatedMovieData = {
         actors: oldMovie.actors
@@ -47,15 +47,15 @@ async function addActor(id, actor) {
         $set: updatedMovieData
     };
     await movieCollection.updateOne({_id: id}, updateCommand);
-    return await getMovieById(id);
-}
+    return await this.getMovieById(id);
+};
 
-async function addGenre(id, genre) {
+module.exports.addGenre = async (id, genre) => {
     if (typeof genre !== "string")
         throw "Invalid genre";
 
     const movieCollection = await movies();
-    const oldMovie = await getMovieById(id);
+    const oldMovie = await this.getMovieById(id);
 
     let updatedMovieData = {
         genres: oldMovie.genres
@@ -66,15 +66,15 @@ async function addGenre(id, genre) {
         $set: updatedMovieData
     };
     await movieCollection.updateOne({_id: id}, updateCommand);
-    return await getMovieById(id);
-}
+    return await this.getMovieById(id);
+};
 
-async function addGallery(id, gallery_path) {
+module.exports.addGallery = async (id, gallery_path) => {
     if (typeof gallery_path !== "string")
         throw "Invalid path";
 
     const movieCollection = await movies();
-    const oldMovie = await getMovieById(id);
+    const oldMovie = await this.getMovieById(id);
 
     let updatedMovieData = {
         galleries: oldMovie.galleries
@@ -85,15 +85,15 @@ async function addGallery(id, gallery_path) {
         $set: updatedMovieData
     };
     await movieCollection.updateOne({_id: id}, updateCommand);
-    return await getMovieById(id);
-}
+    return await this.getMovieById(id);
+};
 
-async function addComment(id, comment_id) {
+module.exports.addComment = async (id, comment_id) => {
     if (typeof comment_id !== "string")
         throw "Invalid comment id";
 
     const movieCollection = await movies();
-    const oldMovie = await getMovieById(id);
+    const oldMovie = await this.getMovieById(id);
 
     let updatedMovieData = {
         comments: oldMovie.comments
@@ -102,7 +102,7 @@ async function addComment(id, comment_id) {
 
     let total_score = 0;
     for (let comment_id of updatedMovieData.comments) {
-        const comment = comments.getCommentByID(comment_id);
+        const comment = comments.getCommentById(comment_id);
         total_score += comment.user_score;
     }
     updatedMovieData.avg_score = total_score / updatedMovieData.comments.length;
@@ -111,10 +111,10 @@ async function addComment(id, comment_id) {
         $set: updatedMovieData
     };
     await movieCollection.updateOne({_id: id}, updateCommand);
-    return await getMovieById(id);
-}
+    return await this.getMovieById(id);
+};
 
-async function updateMovie(id, updatedMovie) {
+module.exports.updateMovie = async (id, updatedMovie) => {
     const movieCollection = await movies();
 
     let updatedMovieData = {};
@@ -157,26 +157,26 @@ async function updateMovie(id, updatedMovie) {
     };
 
     await movieCollection.updateOne({_id: id}, updateCommand);
-    return await getMovieById(id);
-}
+    return await this.getMovieById(id);
+};
 
-async function removeMovie(id) {
+module.exports.removeMovie = async (id) => {
     const movieCollection = await movies();
     const deleteInfo = await movieCollection.removeOne({_id: id});
     if (deleteInfo.deletedCount === 0) {
         throw `Could not delete movie ${id}`;
     }
-}
+};
 
-async function getAllMovies() {
+module.exports.getAllMovies = async () => {
     const movieCollection = movies();
     return await movieCollection.find().toArray();
-}
+};
 
-async function getMovieById(id) {
+module.exports.getMovieById = async (id) => {
     const movieCollection = movies();
     const movie = await movieCollection.findOne({_id: id});
     if (!movie)
         throw "Movie not found";
     return movie;
-}
+};
