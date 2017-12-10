@@ -180,3 +180,69 @@ module.exports.getMovieById = async (id) => {
         throw "Movie not found";
     return movie;
 };
+
+module.exports.getMovieByTitle = async (title) => {
+    const movieCollection = movies();
+    const movie = await movieCollection.findOne({title: title});
+    if (!movie)
+        throw "Movie not found";
+    return movie;
+};
+
+module.exports.getMovieByTitleFussy = async (title) => {
+    const movieCollection = movies();
+    const movieList = await movieCollection.find({title: new RegExp(title)}).toArray();
+    if (!movieList)
+        throw "Movie not found";
+    return movieList;
+};
+
+module.exports.getMovieByActor = async (actor) => {
+    const movieCollection = movies();
+    const movieList = await movieCollection.find({
+        actors: {
+            "$in": [actor]
+        }
+    }).toArray();
+    if (!movieList)
+        throw "Movie not found";
+    return movieList;
+};
+
+module.exports.getMovieByDirector = async (director) => {
+    const movieCollection = movies();
+    const movieList = await movieCollection.find({director: director}).toArray();
+    if (!movieList)
+        throw "Movie not found";
+    return movieList;
+};
+
+module.exports.getMovieByGenre = async (genre) => {
+    const movieCollection = movies();
+    const movieList = await movieCollection.find({
+        genres: {
+            "$in": [genre]
+        }
+    }).toArray();
+    if (!movieList)
+        throw "Movie not found";
+    return movieList;
+};
+
+module.exports.getMovieByRating = async (rating) => {
+    const movieCollection = movies();
+    const movieList = await movieCollection.find({rating: rating}).toArray();
+    if (!movieList)
+        throw "Movie not found";
+    return movieList;
+};
+
+module.exports.getMovieOverScore = async (score) => {
+    const movieCollection = movies();
+    const movieList = await movieCollection.find({
+        avg_score: {$gte: score}
+    }).toArray();
+    if (!movieList)
+        throw "Movie not found";
+    return movieList;
+};

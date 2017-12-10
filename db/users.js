@@ -113,3 +113,11 @@ module.exports.getUserById = async (id) => {
         throw "User not found";
     return user;
 };
+
+module.exports.getUserByUsername = async (user_name) => {
+    const userCollection = users();
+    const user = await userCollection.findOne({user_name: user_name});
+    if (!user)
+        throw "User not found";
+    return user;
+};

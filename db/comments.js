@@ -1,6 +1,8 @@
 const uuidv4 = require("uuid/v4");
 const mongoCollections = require("mongoCollections");
 const comments = mongoCollections.comments;
+const users = require("./users");
+const movies = require("./movies");
 
 module.exports.addComment = async (user_id, movie_id, user_score, content) => {
     if (typeof user_id !== "string")
@@ -62,4 +64,30 @@ module.exports.getCommentById = async (id) => {
     if (!comment)
         throw "Comment not found";
     return comment;
+};
+
+module.exports.getCommentByUserId = async (user_id) => {
+    const commentCollection = comments();
+    const commentList = await commentCollection.find({user_id: user_id}).toArray();
+    if (!commentList)
+        throw "Comment not found";
+    return commentList;
+};
+
+module.exports.getCommentByUserName = async (user_name) => {
+    const user = users.getUserByUsername(user_name);
+    return this.getCommentByUserId(user._id);
+};
+
+module.exports.getCommentByMovieId = async (movie_id) => {
+    const commentCollection = comments();
+    const commentList = await commentCollection.find({movie_id: movie_id}).toArray();
+    if (!commentList)
+        throw "Comment not found";
+    return commentList;
+};
+
+module.exports.getCommentByMovieTitle = async (movie_title) => {
+    const movie = movies.getMovieByTitle(movie_title);
+    return this.getCommentByMovieId(movie._id);
 };
