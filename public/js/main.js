@@ -4,9 +4,7 @@
      * Variables
      */
     var user_id = '1111';
-    var user_fullname = 'John';
-    var lng = -122.08;
-    var lat = 37.38;
+    var user_fullname = 'Mark';
 
     /**
      * Initialize
@@ -19,54 +17,21 @@
 
         var welcomeMsg = $('welcome-msg');
         welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
-        initGeoLocation();
-    }
-
-    function initGeoLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(onPositionUpdated,
-                onLoadPositionFailed, {
-                    maximumAge: 60000
-                });
-            showLoadingMessage('Retrieving your location...');
-        } else {
-            onLoadPositionFailed();
-        }
-    }
-
-    function onPositionUpdated(position) {
-        lat = position.coords.latitude;
-        lng = position.coords.longitude;
-
-        loadNearbyItems();
-    }
-
-    function onLoadPositionFailed() {
-        console.warn('navigator.geolocation is not available');
-        getLocationFromIP();
-    }
-
-    function getLocationFromIP() {
-        // Get location from http://ipinfo.io/json
-        var url = 'http://ipinfo.io/json'
-        var req = null;
-        ajax('GET', url, req, function(res) {
-            var result = JSON.parse(res);
-            if ('loc' in result) {
-                var loc = result.loc.split(',');
-                lat = loc[0];
-                lng = loc[1];
-            } else {
-                console.warn('Getting location by IP failed.');
-            }
-            loadNearbyItems();
-        });
     }
 
     // -----------------------------------
     // Helper Functions
     // -----------------------------------
-
+    
+    // Get the modal
+    var modal = document.getElementById('id01');
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
     /**
      * A helper function that makes a navigation button active
      * 
@@ -179,39 +144,7 @@
     // AJAX call server-side APIs
     // -------------------------------------
 
-    /**
-     * API #1 Load the nearby items API end point: [GET]
-     * /Dashi/search?user_id=1111&lat=37.38&lon=-122.08
-     */
-    function loadNearbyItems() {
-        console.log('loadNearbyItems');
-        activeBtn('nearby-btn');
-
-        // The request parameters
-        var url = './search';
-        var params = 'user_id=' + user_id + '&lat=' + lat + '&lon=' + lng;
-        var req = JSON.stringify({});
-
-        // display loading message
-        showLoadingMessage('Loading nearby items...');
-
-        // make AJAX call
-        ajax('GET', url + '?' + params, req,
-            // successful callback
-            function(res) {
-                var items = JSON.parse(res);
-                if (!items || items.length === 0) {
-                    showWarningMessage('No nearby item.');
-                } else {
-                    listItems(items);
-                }
-            },
-            // failed callback
-            function() {
-                showErrorMessage('Cannot load nearby items.');
-            });
-    }
-
+    
     /**
      * API #2 Load favorite (or visited) items API end point: [GET]
      * /Dashi/history?user_id=1111

@@ -1,21 +1,87 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="description" content="Item Recommendation">
   <meta name="author" content="Your Name">
-  <title>Item Recommendation Final</title>
+  <title>Movie Recommendation Website</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="public/css/main.css">
+  <link rel="stylesheet" href="public/css/login.css">
+  <link rel="stylesheet" href="public/css/signup.css">
 </head>
 <body>
   <header class="top-header">
+
     <nav class="top-nav">
       <a href="#">Home</a>
       <a href="#">Contact</a>
       <a href="#">About</a>
     </nav>
+    <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+    
+    <div id="id01" class="modal">
+      
+      <form class="modal-content animate" action="/action_page.php">
+
+        <div class="imgcontainer">
+          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+          
+        </div>
+    
+        <div class="form-container">
+          <label><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="uname" required>
+    
+          <label><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+          <input type="checkbox" checked="checked" id = "rem">
+          <label for="rem" class="remember"> Remember me</label>
+          <p></p>  
+          <button type="submit">Login</button>
+
+        </div>
+    
+        <div class="form-container w3-border-top w3-padding-16 w3-light-grey" style="background-color:#f3f4f5">
+          <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+          <span class="psw">Forgot <a href="#">password?</a></span>
+        </div>
+      </form>
+    </div>
+
+    <button onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Sign Up</button>
+    
+    <div id="id02" class="modal">
+      <!-- <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">×</span> -->
+
+      <form class="modal-content animate" action="/action_page.php">
+        <div class="imgcontainer">
+            <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+            
+        </div>
+        <div class="container">
+          <label><b>Email</b></label>
+          <input type="text" placeholder="Enter Email" name="email" required>
+    
+          <label><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+    
+          <label><b>Repeat Password</b></label>
+          <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+          <input type="checkbox" checked="checked" id = "rem">
+          <label for="rem" class="remember"> Remember me</label>
+          <p class="term">By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+    
+          <div class="clearfix">
+            <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+            <button type="submit" class="signupbtn">Sign Up</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
     <span id="welcome-msg"></span>
     <i id="avatar" class="avatar fa fa-user fa-2x"></i>
   </header>
@@ -23,7 +89,7 @@
   <div class="container">
     <header>
       <p>
-        <span>Item</span>
+        <span>Movie</span>
         <br /> Recommendation
       </p>
     </header>
@@ -35,7 +101,7 @@
         </div>
         <nav class="main-nav">
           <a href="#" id="nearby-btn" class="main-nav-btn active">
-            <i class="fa fa-map-marker"></i> Nearby
+            <i class="fa fa-map-marker"></i> Genre
           </a>
           <a href="#" id="fav-btn" class="main-nav-btn">
             <i class="fa fa-heart"></i> My Favorites
@@ -48,17 +114,17 @@
 
       <ul id="item-list">
         <li class="item">
-          <img alt="item image" src="https://s3-media3.fl.yelpcdn.com/bphoto/EmBj4qlyQaGd9Q4oXEhEeQ/ms.jpg" />
+          <img alt="item image" src="data:image/png;base64,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" />
           <div>
-            <a class="item-name" href="#">Item</a>
-            <p class="item-category">Vegetarian</p>
+            <a class="item-name" href="#">Movie</a>
+            <p class="item-category">Dunkirk</p>
             <div class="stars">
               <i class="fa fa-star"></i>
               <i class="fa fa-star"></i>
               <i class="fa fa-star"></i>
             </div>
           </div>
-          <p class="item-address">699 Calderon Ave<br/>Mountain View<br/> CA</p>
+          <p class="item-address"> <br/>Mountain View<br/> NJ</p>
           <div class="fav-link">
             <i class="fa fa-heart"></i>
           </div>
@@ -73,7 +139,7 @@
     <ul>
       <li>
         <p><i class="fa fa-map-o fa-2x"></i></p>
-        <p>LaiOffer office, CA</p>
+        <p>LaiOffer office, NJ</p>
       </li>
       <li>
         <p><i class="fa fa-envelope-o fa-2x"></i></p>
