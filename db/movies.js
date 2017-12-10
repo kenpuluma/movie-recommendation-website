@@ -142,4 +142,3 @@ async function getMovieById(id) {
         throw "Movie not found";
     return movie;
 }
-

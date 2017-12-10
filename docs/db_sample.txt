@@ -2,7 +2,7 @@ User
 {
 	"_id": "6f5b8a8b-bfc7-4148-ad94-6b93b5ddce78",
 	"user_name": "user1",
-	"password": "user1Passwrd",
+	"hashed_password": "user1Passwrd",
 	"profile": {
 		"email": "user1email@gmail.com",
 		"phone": "2012012001"
@@ -20,7 +20,7 @@ User
 Movie
 {
 	"_id": "d88c3d80-1d82-44b3-8978-9ab4e1429c98",
-	"name": "The Godfather",
+	"title": "The Godfather",
 	"released_date": "March 24, 1972",
 	"actors": [
 		"Marlon Brando",
@@ -35,7 +35,7 @@ Movie
 	],
 	"rating": "R",
 	"avg_score": 5.0,
-	"gallerys": [
+	"galleries": [
 		"./pic/godfather1",
 		"./pic/godfather2"
 	],
