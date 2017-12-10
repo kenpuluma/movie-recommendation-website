@@ -11,9 +11,14 @@
      */
     function init() {
         // Register event listeners
-        $('nearby-btn').addEventListener('click', loadNearbyItems);
-        $('fav-btn').addEventListener('click', loadFavoriteItems);
-        $('recommend-btn').addEventListener('click', loadRecommendedItems);
+        $('comedy-btn').addEventListener('click', loadComedies);
+        $('disaster-btn').addEventListener('click', loadDisasters);
+        $('crime-btn').addEventListener('click', loadCrimes);
+        $('war-btn').addEventListener('click', loadWars);
+        $('horror-btn').addEventListener('click', loadHorrors);
+        $('science-fiction-btn').addEventListener('click', loadScienceFictions);
+        $('romantic-btn').addEventListener('click', loadRomantics);
+        $('action-btn').addEventListener('click', loadActions);
 
         var welcomeMsg = $('welcome-msg');
         welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
@@ -143,14 +148,9 @@
     // -------------------------------------
     // AJAX call server-side APIs
     // -------------------------------------
-
     
-    /**
-     * API #2 Load favorite (or visited) items API end point: [GET]
-     * /Dashi/history?user_id=1111
-     */
-    function loadFavoriteItems() {
-        activeBtn('fav-btn');
+    function loadComedies() {
+        activeBtn('comedy-btn');
 
         // The request parameters
         var url = './history';
@@ -158,56 +158,190 @@
         var req = JSON.stringify({});
 
         // display loading message
-        showLoadingMessage('Loading favorite items...');
+        showLoadingMessage('Loading comedies...');
 
         // make AJAX call
-        ajax('GET', url + '?' + params, req, function(res) {
+        ajax('GET', url + '?' + params, req, (res) => {
             var items = JSON.parse(res);
             if (!items || items.length === 0) {
-                showWarningMessage('No favorite item.');
+                showWarningMessage('No comedies.');
             } else {
                 listItems(items);
             }
-        }, function() {
-            showErrorMessage('Cannot load favorite items.');
+        }, () => {
+            showErrorMessage('Cannot load commedies.');
         });
     }
 
-    /**
-     * API #3 Load recommended items API end point: [GET]
-     * /Dashi/recommendation?user_id=1111
-     */
-    function loadRecommendedItems() {
-        activeBtn('recommend-btn');
+    function loadDisasters() {
+        activeBtn('disaster-btn');
 
         // The request parameters
-        var url = './recommendation';
-        var params = 'user_id=' + user_id + '&lat=' + lat + '&lon=' + lng;
-
+        var url = './history';
+        var params = 'user_id=' + user_id;
         var req = JSON.stringify({});
 
         // display loading message
-        showLoadingMessage('Loading recommended items...');
+        showLoadingMessage('Loading disaster films...');
 
         // make AJAX call
-        ajax(
-            'GET',
-            url + '?' + params,
-            req,
-            // successful callback
-            function(res) {
-                var items = JSON.parse(res);
-                if (!items || items.length === 0) {
-                    showWarningMessage('No recommended item. Make sure you have favorites.');
-                } else {
-                    listItems(items);
-                }
-            },
-            // failed callback
-            function() {
-                showErrorMessage('Cannot load recommended items.');
-            });
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+            if (!items || items.length === 0) {
+                showWarningMessage('No disaster films.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load disaster films.');
+        });
     }
+
+    function loadCrimes() {
+        activeBtn('crime-btn');
+
+        // The request parameters
+        var url = './history';
+        var params = 'user_id=' + user_id;
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Loading crimes...');
+
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+            if (!items || items.length === 0) {
+                showWarningMessage('No crimes.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load crimes.');
+        });
+    }
+
+    function loadWars() {
+        activeBtn('war-btn');
+
+        // The request parameters
+        var url = './history';
+        var params = 'user_id=' + user_id;
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Loading wars...');
+
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+            if (!items || items.length === 0) {
+                showWarningMessage('No wars.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load wars.');
+        });
+    }
+
+    function loadHorrors() {
+        activeBtn('horror-btn');
+
+        // The request parameters
+        var url = './history';
+        var params = 'user_id=' + user_id;
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Loading horrors...');
+
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+            if (!items || items.length === 0) {
+                showWarningMessage('No horrors.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load horrors.');
+        });
+    }
+
+    function loadScienceFictions() {
+        activeBtn('science-fiction-btn');
+
+        // The request parameters
+        var url = './history';
+        var params = 'user_id=' + user_id;
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Loading science fictions...');
+
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+            if (!items || items.length === 0) {
+                showWarningMessage('No science fictions.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load science fictions.');
+        });
+    }
+
+    function loadRomantics() {
+        activeBtn('romantic-btn');
+
+        // The request parameters
+        var url = './history';
+        var params = 'user_id=' + user_id;
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Loading romantics...');
+
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+            if (!items || items.length === 0) {
+                showWarningMessage('No romantics.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load romantics.');
+        });
+    }
+
+    function loadActions() {
+        activeBtn('action-btn');
+
+        // The request parameters
+        var url = './history';
+        var params = 'user_id=' + user_id;
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Loading actions...');
+
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+            if (!items || items.length === 0) {
+                showWarningMessage('No actions.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load actions.');
+        });
+    }
+
+   
 
     /**
      * API #4 Toggle favorite (or visited) items
