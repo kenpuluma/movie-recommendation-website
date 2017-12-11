@@ -9,6 +9,8 @@
   "author": "Stevens Syndicate",
   "license": "MIT",
   "dependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
     "mongodb": "^2.2.33",
     "uuid": "^3.1.0"
   }

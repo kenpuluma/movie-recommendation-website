@@ -25,12 +25,12 @@ module.exports.addUser = async (user_name, hashed_password, email, phone) => {
     return await this.getUserById(userId);
 };
 
-module.exports.addComment = async (id, comment_id) => {
+module.exports.addComment = async (user_id, comment_id) => {
     if (typeof comment_id !== "string")
-        throw "Invalid comment id";
+        throw "Invalid comment user_id";
 
     const userCollection = await users();
-    const oldUser = await this.getUserById(id);
+    const oldUser = await this.getUserById(user_id);
 
     let updatedUserData = {
         comments: oldUser.comments
@@ -40,16 +40,31 @@ module.exports.addComment = async (id, comment_id) => {
     let updateCommand = {
         $set: updatedUserData
     };
-    await userCollection.updateOne({_id: id}, updateCommand);
-    return await this.getUserById(id);
+    await userCollection.updateOne({_id: user_id}, updateCommand);
+    return await this.getUserById(user_id);
 };
 
-module.exports.addFavorite = async (id, movie_id) => {
+module.exports.removeComment = async (user_id, comment_id) => {
+    const userCollection = await users();
+    const oldUser = await this.getUserById(user_id);
+
+    let updatedUserData = {
+        comments: oldUser.comments.filter(e => e !== comment_id)
+    };
+
+    let updateCommand = {
+        $set: updatedUserData
+    };
+    await userCollection.updateOne({_id: user_id}, updateCommand);
+    return await this.getUserById(user_id);
+};
+
+module.exports.addFavorite = async (user_id, movie_id) => {
     if (typeof movie_id !== "string")
-        throw "Invalid movie id";
+        throw "Invalid movie user_id";
 
     const userCollection = await users();
-    const oldUser = await this.getUserById(id);
+    const oldUser = await this.getUserById(user_id);
 
     let updatedUserData = {
         favorites: oldUser.favorites
@@ -59,8 +74,23 @@ module.exports.addFavorite = async (id, movie_id) => {
     let updateCommand = {
         $set: updatedUserData
     };
-    await userCollection.updateOne({_id: id}, updateCommand);
-    return await this.getUserById(id);
+    await userCollection.updateOne({_id: user_id}, updateCommand);
+    return await this.getUserById(user_id);
+};
+
+module.exports.removeFavorite = async (user_id, movie_id) => {
+    const userCollection = await users();
+    const oldUser = await this.getUserById(user_id);
+
+    let updatedUserData = {
+        favorites: oldUser.favorites.filter(e => e !== movie_id)
+    };
+
+    let updateCommand = {
+        $set: updatedUserData
+    };
+    await userCollection.updateOne({_id: user_id}, updateCommand);
+    return await this.getUserById(user_id);
 };
 
 module.exports.updateUser = async (id, updatedUser) => {
