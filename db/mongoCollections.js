@@ -20,10 +20,11 @@ module.exports = {
 
     initCollections: async () => {
         const db = await dbConnection();
-        const getCollection = await db.createCollection("users");
-        const moiveCollection = await db.createCollection("movies");
-        const commentCollection = await db.createCollection("comments");
+        await db.createCollection("users");
+        await db.createCollection("movies");
+        await db.createCollection("comments");
     },
+
     dropAllCollections: async () => {
         const db = await dbConnection();
         try {
@@ -33,6 +34,12 @@ module.exports = {
         } catch (e) {
 
         }
+    },
+
+    closeCollection:async ()=>{
+        const db=await dbConnection();
+        db.close();
+        console.log("You are no longer connected");
     }
 };
 
