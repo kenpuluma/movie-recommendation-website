@@ -26,7 +26,7 @@ module.exports.addMovie = async (title, released_date, director, rating, actors,
 
     const movieCollection = await movies();
     const newInsertInfo = await movieCollection.insertOne(newMovie);
-    const movieId = await newInsertInfo.insertId;
+    const movieId = await newInsertInfo.insertedId;
 
     return await this.getMovieById(movieId);
 };

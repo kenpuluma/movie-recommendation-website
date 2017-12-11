@@ -9,8 +9,8 @@ module.exports.addComment = async (user_id, movie_id, user_score, content) => {
         throw "No user provided";
     if (typeof movie_id !== "string")
         throw "No movie provided";
-    if (typeof user_score !== "number")
-        throw "You must provide a score";
+    if (typeof user_score !== "number" || user_score < 0 || user_score > 5)
+        throw "You must provide a valid score";
 
     let newComment = {
         _id: uuidv4(),
