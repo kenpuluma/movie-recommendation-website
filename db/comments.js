@@ -1,5 +1,5 @@
 const uuidv4 = require("uuid/v4");
-const mongoCollections = require("mongoCollections");
+const mongoCollections = require("./mongoCollections");
 const comments = mongoCollections.comments;
 const users = require("./users");
 const movies = require("./movies");
@@ -54,12 +54,12 @@ module.exports.removeComment = async (id) => {
 };
 
 module.exports.getAllComments = async () => {
-    const commentCollection = comments();
+    const commentCollection = await comments();
     return await commentCollection.find().toArray();
 };
 
 module.exports.getCommentById = async (id) => {
-    const commentCollection = comments();
+    const commentCollection = await comments();
     const comment = await commentCollection.findOne({_id: id});
     if (!comment)
         throw "Comment not found";
@@ -67,7 +67,7 @@ module.exports.getCommentById = async (id) => {
 };
 
 module.exports.getCommentByUserId = async (user_id) => {
-    const commentCollection = comments();
+    const commentCollection = await comments();
     const commentList = await commentCollection.find({user_id: user_id}).toArray();
     if (!commentList)
         throw "Comment not found";
@@ -80,7 +80,7 @@ module.exports.getCommentByUserName = async (user_name) => {
 };
 
 module.exports.getCommentByMovieId = async (movie_id) => {
-    const commentCollection = comments();
+    const commentCollection = await comments();
     const commentList = await commentCollection.find({movie_id: movie_id}).toArray();
     if (!commentList)
         throw "Comment not found";

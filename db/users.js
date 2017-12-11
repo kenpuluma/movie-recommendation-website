@@ -1,5 +1,5 @@
 const uuidv4 = require("uuid/v4");
-const mongoCollections = require("mongoCollections");
+const mongoCollections = require("./mongoCollections");
 const users = mongoCollections.users;
 
 module.exports.addUser = async (user_name, hashed_password, email, phone) => {
@@ -102,12 +102,12 @@ module.exports.removeUser = async (id) => {
 };
 
 module.exports.getAllUsers = async () => {
-    const userCollection = users();
+    const userCollection = await users();
     return await userCollection.find().toArray();
 };
 
 module.exports.getUserById = async (id) => {
-    const userCollection = users();
+    const userCollection = await users();
     const user = await userCollection.findOne({_id: id});
     if (!user)
         throw "User not found";
@@ -115,7 +115,7 @@ module.exports.getUserById = async (id) => {
 };
 
 module.exports.getUserByUsername = async (user_name) => {
-    const userCollection = users();
+    const userCollection = await users();
     const user = await userCollection.findOne({user_name: user_name});
     if (!user)
         throw "User not found";

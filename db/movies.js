@@ -1,5 +1,5 @@
 const uuidv4 = require("uuid/v4");
-const mongoCollections = require("mongoCollections");
+const mongoCollections = require("./mongoCollections");
 const movies = mongoCollections.movies;
 const comments = require("./comments");
 
@@ -169,12 +169,12 @@ module.exports.removeMovie = async (id) => {
 };
 
 module.exports.getAllMovies = async () => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     return await movieCollection.find().toArray();
 };
 
 module.exports.getMovieById = async (id) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movie = await movieCollection.findOne({_id: id});
     if (!movie)
         throw "Movie not found";
@@ -182,7 +182,7 @@ module.exports.getMovieById = async (id) => {
 };
 
 module.exports.getMovieByTitle = async (title) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movie = await movieCollection.findOne({title: title});
     if (!movie)
         throw "Movie not found";
@@ -190,7 +190,7 @@ module.exports.getMovieByTitle = async (title) => {
 };
 
 module.exports.getMovieByTitleFussy = async (title) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movieList = await movieCollection.find({title: new RegExp(title)}).toArray();
     if (!movieList)
         throw "Movie not found";
@@ -198,7 +198,7 @@ module.exports.getMovieByTitleFussy = async (title) => {
 };
 
 module.exports.getMovieByActor = async (actor) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movieList = await movieCollection.find({
         actors: {
             "$in": [actor]
@@ -210,7 +210,7 @@ module.exports.getMovieByActor = async (actor) => {
 };
 
 module.exports.getMovieByDirector = async (director) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movieList = await movieCollection.find({director: director}).toArray();
     if (!movieList)
         throw "Movie not found";
@@ -218,7 +218,7 @@ module.exports.getMovieByDirector = async (director) => {
 };
 
 module.exports.getMovieByGenre = async (genre) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movieList = await movieCollection.find({
         genres: {
             "$in": [genre]
@@ -230,7 +230,7 @@ module.exports.getMovieByGenre = async (genre) => {
 };
 
 module.exports.getMovieByRating = async (rating) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movieList = await movieCollection.find({rating: rating}).toArray();
     if (!movieList)
         throw "Movie not found";
@@ -238,7 +238,7 @@ module.exports.getMovieByRating = async (rating) => {
 };
 
 module.exports.getMovieOverScore = async (score) => {
-    const movieCollection = movies();
+    const movieCollection = await movies();
     const movieList = await movieCollection.find({
         avg_score: {$gte: score}
     }).toArray();

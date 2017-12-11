@@ -1,6 +1,6 @@
 const dbConnection = require("./mongoConnection");
 
-async function getCollection(collection) {
+const getCollection = (collection) => {
     let _col = undefined;
 
     return async () => {
@@ -11,7 +11,7 @@ async function getCollection(collection) {
 
         return _col;
     };
-}
+};
 
 module.exports = {
     users: getCollection("users"),
