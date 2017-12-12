@@ -81,8 +81,8 @@ module.exports.getCommentByUserId = async (user_id) => {
 };
 
 module.exports.getCommentByUserName = async (user_name) => {
-    const user = users.getUserByUsername(user_name);
-    return this.getCommentByUserId(user._id);
+    const user = await users.getUserByUsername(user_name);
+    return await this.getCommentByUserId(user._id);
 };
 
 module.exports.getCommentByMovieId = async (movie_id) => {
@@ -94,8 +94,8 @@ module.exports.getCommentByMovieId = async (movie_id) => {
 };
 
 module.exports.getCommentByMovieTitle = async (movie_title) => {
-    const movie = movies.getMovieByTitle(movie_title);
-    return this.getCommentByMovieId(movie._id);
+    const movie = await movies.getMovieByTitle(movie_title);
+    return await this.getCommentByMovieId(movie._id);
 };
 
 module.exports.getCommentByUserAndMovieId = async (user_id, movie_id) => {

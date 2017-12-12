@@ -30,7 +30,7 @@ describe("db", function () {
             it("get all users", async function () {
                 const userList = await userData.getAllUsers();
                 userList.should.have.length(2);
-            })
+            });
         });
 
         describe('updateUser', function () {
@@ -40,7 +40,7 @@ describe("db", function () {
                 const user2 = await userData.updateUser(updatedUser2._id, updatedUser2);
                 user2.profile.should.include({
                     email: "user2@gmail.com"
-                })
+                });
             });
             it('remove user by id', async function () {
                 let user2 = await userData.getUserByUsername("testuser2");
@@ -176,9 +176,54 @@ describe("db", function () {
                 comment2.should.include({
                     user_id: user2._id,
                     movie_id: movie1._id
-                })
+                });
             });
-        })
+        });
+
+        describe('update comment', function () {
+            it('update comment with object', async function () {
+                let updatedComment2 = (await commentData.getCommentByUserName("testuser2"))[0];
+                updatedComment2.content = "Bad";
+                const comment = await commentData.updateComment(updatedComment2._id, updatedComment2);
+                comment.should.include({content: "Bad"});
+            });
+            it('remove comment by id', async function () {
+                const comment2 = (await commentData.getCommentByUserName("testuser2"))[0];
+                await commentData.removeComment(comment2._id);
+                const commentList = await commentData.getAllComments();
+                commentList.should.have.length(1);
+
+                const user2 = await userData.getUserByUsername("testuser2");
+                const movie1 = await movieData.getMovieByTitle("testmovie1");
+                await commentData.addComment(user2._id, movie1._id, 0, null);
+            });
+        });
+
+        describe('get comment', function () {
+            it('get all comments', async function () {
+                const commentList = await commentData.getAllComments();
+                commentList.should.have.length(2);
+            });
+            it('get comment by user id', async function () {
+                const user1 = await userData.getUserByUsername("testuser1");
+                const commentList = await commentData.getCommentByUserId(user1._id);
+                commentList.should.have.length(1);
+            });
+            it('get comment by movie id', async function () {
+                const movie1 = await movieData.getMovieByTitle("testmovie1");
+                const commentList = await commentData.getCommentByMovieId(movie1._id);
+                commentList.should.have.length(2);
+            });
+            it('get movie by user and movie id', async function () {
+                const user1 = await userData.getUserByUsername("testuser1");
+                const movie1 = await movieData.getMovieByTitle("testmovie1");
+                const comment1 = await commentData.getCommentByUserAndMovieId(user1._id, movie1._id);
+                comment1.should.include({
+                    user_id: user1._id,
+                    movie_id: movie1._id
+                });
+            });
+        });
     });
 
     describe("user interact", function () {
@@ -219,18 +264,18 @@ describe("db", function () {
                 const user1 = await userData.getUserByUsername("testuser1");
                 let movie1 = await movieData.getMovieByTitle("testmovie1");
                 const comment1 = await commentData.getCommentByUserAndMovieId(user1._id, movie1._id);
-                movie1=await movieData.addComment(movie1._id,comment1._id);
+                movie1 = await movieData.addComment(movie1._id, comment1._id);
                 movie1.comments.should.have.length(1);
             });
             it('add comment to movie', async function () {
                 const user2 = await userData.getUserByUsername("testuser2");
                 let movie1 = await movieData.getMovieByTitle("testmovie1");
                 const comment2 = await commentData.getCommentByUserAndMovieId(user2._id, movie1._id);
-                movie1=await movieData.addComment(movie1._id,comment2._id);
+                movie1 = await movieData.addComment(movie1._id, comment2._id);
                 movie1.avg_score.should.equal(2.5);
             });
             it('get movie over avg score 2', async function () {
-                const movieList=await movieData.getMovieOverScore(2);
+                const movieList = await movieData.getMovieOverScore(2);
                 movieList.should.have.length(1);
             });
         });
