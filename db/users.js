@@ -18,16 +18,25 @@ module.exports.addUser = async (user_name, hashed_password, email, phone) => {
         favorites: []
     };
 
-    const userCollection = await users();
-    const newInsertInfo = await userCollection.insertOne(newUser);
-    const userId = await newInsertInfo.insertedId;
+    try {
+        await this.getUserByUsername(user_name);
+    } catch (e) {
+        const userCollection = await users();
+        const newInsertInfo = await userCollection.insertOne(newUser);
+        const userId = await newInsertInfo.insertedId;
 
-    return await this.getUserById(userId);
+        return await this.getUserById(userId);
+    }
+
+    throw "User already exists";
 };
 
 module.exports.addComment = async (user_id, comment_id) => {
+    if (typeof user_id !== "string")
+        throw "Invalid user id";
+
     if (typeof comment_id !== "string")
-        throw "Invalid comment user_id";
+        throw "Invalid comment id";
 
     const userCollection = await users();
     const oldUser = await this.getUserById(user_id);
@@ -60,8 +69,11 @@ module.exports.removeComment = async (user_id, comment_id) => {
 };
 
 module.exports.addFavorite = async (user_id, movie_id) => {
+    if (typeof user_id !== "string")
+        throw "Invalid user id";
+
     if (typeof movie_id !== "string")
-        throw "Invalid movie user_id";
+        throw "Invalid movie id";
 
     const userCollection = await users();
     const oldUser = await this.getUserById(user_id);
@@ -103,6 +115,11 @@ module.exports.updateUser = async (id, updatedUser) => {
     if (updatedUser.hashed_password) {
         updatedUserData.hashed_password = updatedUser.hashed_password;
     }
+
+    if (updatedUser.profile) {
+        updatedUserData.profile = {};
+    }
+
     if (updatedUser.profile.email) {
         updatedUserData.profile.email = updatedUser.profile.email;
     }
@@ -123,11 +140,19 @@ module.exports.updateUser = async (id, updatedUser) => {
     return await this.getUserById(id);
 };
 
-module.exports.removeUser = async (id) => {
+module.exports.removeUserById = async (id) => {
     const userCollection = await users();
     const deleteInfo = await userCollection.removeOne({_id: id});
     if (deleteInfo.deletedCount === 0) {
         throw `Could not delete user ${id}`;
+    }
+};
+
+module.exports.removeUserByUsername = async (user_name) => {
+    const userCollection = await users();
+    const deleteInfo = await userCollection.removeOne({user_name: user_name});
+    if (deleteInfo.deletedCount === 0) {
+        throw `Could not delete user ${user_name}`;
     }
 };
 

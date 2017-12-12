@@ -24,11 +24,17 @@ module.exports.addMovie = async (title, released_date, director, rating, actors,
         comments: []
     };
 
-    const movieCollection = await movies();
-    const newInsertInfo = await movieCollection.insertOne(newMovie);
-    const movieId = await newInsertInfo.insertedId;
+    try {
+        await this.getMovieByTitle(title);
+    } catch (e) {
+        const movieCollection = await movies();
+        const newInsertInfo = await movieCollection.insertOne(newMovie);
+        const movieId = await newInsertInfo.insertedId;
 
-    return await this.getMovieById(movieId);
+        return await this.getMovieById(movieId);
+    }
+
+    throw "Movie already exists";
 };
 
 module.exports.addActor = async (id, actor) => {
@@ -45,6 +51,21 @@ module.exports.addActor = async (id, actor) => {
 
     let updateCommand = {
         $set: updatedMovieData
+    };
+    await movieCollection.updateOne({_id: id}, updateCommand);
+    return await this.getMovieById(id);
+};
+
+module.exports.removeActor = async (id, actor) => {
+    const movieCollection = await movies();
+    const oldMovie = await this.getMovieById(id);
+
+    let updatedUserData = {
+        actors: oldMovie.actors.filter(e => e !== actor)
+    };
+
+    let updateCommand = {
+        $set: updatedUserData
     };
     await movieCollection.updateOne({_id: id}, updateCommand);
     return await this.getMovieById(id);
@@ -69,6 +90,21 @@ module.exports.addGenre = async (id, genre) => {
     return await this.getMovieById(id);
 };
 
+module.exports.removeGenre = async (id, genre) => {
+    const movieCollection = await movies();
+    const oldMovie = await this.getMovieById(id);
+
+    let updatedUserData = {
+        actors: oldMovie.actors.filter(e => e !== genre)
+    };
+
+    let updateCommand = {
+        $set: updatedUserData
+    };
+    await movieCollection.updateOne({_id: id}, updateCommand);
+    return await this.getMovieById(id);
+};
+
 module.exports.addGallery = async (id, gallery_path) => {
     if (typeof gallery_path !== "string")
         throw "Invalid path";
@@ -88,6 +124,21 @@ module.exports.addGallery = async (id, gallery_path) => {
     return await this.getMovieById(id);
 };
 
+module.exports.removeGallery = async (id, gallery) => {
+    const movieCollection = await movies();
+    const oldMovie = await this.getMovieById(id);
+
+    let updatedUserData = {
+        actors: oldMovie.actors.filter(e => e !== gallery)
+    };
+
+    let updateCommand = {
+        $set: updatedUserData
+    };
+    await movieCollection.updateOne({_id: id}, updateCommand);
+    return await this.getMovieById(id);
+};
+
 module.exports.addComment = async (id, comment_id) => {
     if (typeof comment_id !== "string")
         throw "Invalid comment id";
@@ -99,16 +150,25 @@ module.exports.addComment = async (id, comment_id) => {
         comments: oldMovie.comments
     };
     updatedMovieData.comments.push(comment_id);
-
-    let total_score = 0;
-    for (let comment_id of updatedMovieData.comments) {
-        const comment = comments.getCommentById(comment_id);
-        total_score += comment.user_score;
-    }
-    updatedMovieData.avg_score = total_score / updatedMovieData.comments.length;
+    await updateAvgScore(updatedMovieData);
 
     let updateCommand = {
         $set: updatedMovieData
+    };
+    await movieCollection.updateOne({_id: id}, updateCommand);
+    return await this.getMovieById(id);
+};
+
+module.exports.removeComment = async (id, comment) => {
+    const movieCollection = await movies();
+    const oldMovie = await this.getMovieById(id);
+
+    let updatedUserData = {
+        actors: oldMovie.actors.filter(e => e !== comment)
+    };
+
+    let updateCommand = {
+        $set: updatedUserData
     };
     await movieCollection.updateOne({_id: id}, updateCommand);
     return await this.getMovieById(id);
@@ -144,12 +204,7 @@ module.exports.updateMovie = async (id, updatedMovie) => {
     }
     if (updatedMovie.comments) {
         updatedMovieData.comments = updatedMovie.comments;
-        let total_score = 0;
-        for (let comment_id of updatedMovie.comments) {
-            const comment = comments.getCommentById(comment_id);
-            total_score += comment.user_score;
-        }
-        updatedMovieData.avg_score = total_score / updatedMovie.comments.length;
+        await updateAvgScore(updatedMovieData);
     }
 
     let updateCommand = {
@@ -160,11 +215,19 @@ module.exports.updateMovie = async (id, updatedMovie) => {
     return await this.getMovieById(id);
 };
 
-module.exports.removeMovie = async (id) => {
+module.exports.removeMovieById = async (id) => {
     const movieCollection = await movies();
     const deleteInfo = await movieCollection.removeOne({_id: id});
     if (deleteInfo.deletedCount === 0) {
         throw `Could not delete movie ${id}`;
+    }
+};
+
+module.exports.removeMovieByTitle = async (title) => {
+    const movieCollection = await movies();
+    const deleteInfo = await movieCollection.removeOne({title: title});
+    if (deleteInfo.deletedCount === 0) {
+        throw `Could not delete movie ${title}`;
     }
 };
 
@@ -246,3 +309,13 @@ module.exports.getMovieOverScore = async (score) => {
         throw "Movie not found";
     return movieList;
 };
+
+
+async function updateAvgScore(updatedMovieData) {
+    let total_score = 0;
+    for (let comment_id of updatedMovieData.comments) {
+        const comment = await comments.getCommentById(comment_id);
+        total_score += comment.user_score;
+    }
+    updatedMovieData.avg_score = total_score / updatedMovieData.comments.length;
+}

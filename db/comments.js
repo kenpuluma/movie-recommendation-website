@@ -20,11 +20,17 @@ module.exports.addComment = async (user_id, movie_id, user_score, content) => {
         content: content
     };
 
-    const commentCollection = await comments();
-    const newInsertInfo = await commentCollection.insertOne(newComment);
-    const commentId = await newInsertInfo.insertedId;
+    try {
+        await this.getCommentByUserAndMovieId(user_id, movie_id);
+    } catch (e) {
+        const commentCollection = await comments();
+        const newInsertInfo = await commentCollection.insertOne(newComment);
+        const commentId = await newInsertInfo.insertedId;
 
-    return await this.getCommentById(commentId);
+        return await this.getCommentById(commentId);
+    }
+
+    throw "Comment already exists";
 };
 
 module.exports.updateComment = async (id, updatedComment) => {
@@ -90,4 +96,15 @@ module.exports.getCommentByMovieId = async (movie_id) => {
 module.exports.getCommentByMovieTitle = async (movie_title) => {
     const movie = movies.getMovieByTitle(movie_title);
     return this.getCommentByMovieId(movie._id);
+};
+
+module.exports.getCommentByUserAndMovieId = async (user_id, movie_id) => {
+    const commentCollection = await comments();
+    const commentList = await commentCollection.find({
+        user_id: user_id,
+        movie_id: movie_id
+    }).toArray();
+    if (!commentList || commentList.length === 0)
+        throw "Comment not found";
+    return commentList[0];
 };
