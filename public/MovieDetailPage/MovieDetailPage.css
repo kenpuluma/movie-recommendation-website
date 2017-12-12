@@ -1,0 +1,48 @@
+.movie_img_container{
+    float: left;
+    width: 40%;
+    height: 800px;
+    background-color: white;
+}
+
+.movie_content_container{
+    float: left;
+    width: 60%;
+    height: 800px;
+    background-color: white;
+}
+
+#MovieImg{
+    width: 100%;
+    height: 100%;
+}
+
+#confirm{
+    text-align: center;
+    margin: 12px 0 12px 0;
+    position: relative;
+    width: 100px;
+}
+
+.topic{ 
+   font-weight:bold;
+   font-size: 40px;
+}
+
+.content{ 
+   font-size: 24px;
+}
+
+.introdution{
+    font-size: 30px;
+}
+
+#bg{  
+    width: 60px;  
+    height: 16px;  
+    background: url("http://chuantu.biz/t6/173/1513034923x-1566687345.png");  
+}  
+#over{  
+    height:16px;  
+    background:url("http://chuantu.biz/t6/173/1513034947x-1566687345.png") no-repeat;  
+} 
