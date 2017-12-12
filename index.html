@@ -16,9 +16,9 @@
   <header class="top-header">
 
     <nav class="top-nav">
-      <a href="#">Home</a>
-      <a href="#">Contact</a>
-      <a href="#">About</a>
+      <a href="index.html">Home</a>
+      <a href="">Favorites</a>
+      <a href="about.html">About</a>
     </nav>
     <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
     
@@ -40,7 +40,7 @@
           <input type="checkbox" checked="checked" id = "rem">
           <label for="rem" class="remember"> Remember me</label>
           <p></p>  
-          <button type="submit">Login</button>
+          <button type="submit" id="login">Login</button>
 
         </div>
     
@@ -56,7 +56,7 @@
     <div id="id02" class="modal">
       <!-- <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">×</span> -->
 
-      <form class="modal-content animate" action="/action_page.php">
+      <form class="modal-content animate">
         <div class="imgcontainer">
             <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
             
@@ -76,7 +76,7 @@
     
           <div class="clearfix">
             <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
-            <button type="submit" class="signupbtn">Sign Up</button>
+            <button type="submit" class="signupbtn" id="signup">Sign Up</button>
           </div>
         </div>
       </form>
@@ -150,15 +150,15 @@
   
   <footer>
     <p class="title">What We Do</p>
-    <p>"Help you find the best place around."</p>
+    <p>"Help you find the best movie around."</p>
     <ul>
       <li>
         <p><i class="fa fa-map-o fa-2x"></i></p>
-        <p>LaiOffer office, NJ</p>
+        <p>Howe Center, Hoboken, NJ</p>
       </li>
       <li>
         <p><i class="fa fa-envelope-o fa-2x"></i></p>
-        <p>info@laioffer.com</p>
+        <p>movie@stevens.edu</p>
       </li>
       <li>
         <p><i class="fa fa-phone fa-2x"></i></p>
