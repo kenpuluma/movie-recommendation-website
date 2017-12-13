@@ -3,8 +3,9 @@
         /**
          * Variables
          */
+        
         var user_id = '1111';
-        var user_fullname = 'Mark';
+        var user_fullname = 'mark';
     
         /**
          * Initialize
@@ -23,8 +24,8 @@
             $('romantic-btn').addEventListener('click', loadRomantics);
             $('action-btn').addEventListener('click', loadActions);
     
-            // var welcomeMsg = $('welcome-msg');
-            // welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
+            var welcomeMsg = $('welcome-msg');
+            welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
         };
     
         // -----------------------------------
