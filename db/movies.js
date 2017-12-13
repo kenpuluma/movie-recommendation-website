@@ -10,6 +10,14 @@ module.exports.addMovie = async (title, released_date, director, rating, actors,
         actors = [];
     if (!Array.isArray(genres))
         genres = [];
+    if (released_date) {
+        const timestamp = Date.parse(released_date);
+
+        if (isNaN(timestamp) === false) {
+            released_date = new Date(timestamp);
+        }
+    }
+
 
     let newMovie = {
         _id: uuidv4(),
