@@ -4,10 +4,10 @@ const users = mongoCollections.users;
 const bcrypt=require("bcrypt");
 
 module.exports.addUser = async (user_name, password, email, phone) => {
-    if (typeof user_name !== "string" || typeof hashed_password !== "string")
+    if (typeof user_name !== "string" || typeof password !== "string")
         throw "Username or password is not recognized";
 
-    const saltRounds = 16;
+    const saltRounds = 4;
     let hashed_password = await bcrypt.hash(password, saltRounds);
 
 
@@ -167,18 +167,18 @@ module.exports.getAllUsers = async () => {
 };
 
 
-module.exports.getUserById = async (id, done) => {
+module.exports.getUserById = async (id) => {
     const userCollection = await users();
     const user = await userCollection.findOne({_id: id});
     if (!user)
-        return done(null, null);
-    return done(null, user);
+        throw "User not found";
+    return user;
 };
 
-module.exports.getUserByUsername = async (user_name, done) => {
+module.exports.getUserByUsername = async (user_name) => {
     const userCollection = await users();
     const user = await userCollection.findOne({user_name: user_name});
     if (!user)
-        return done(null, null);
-    return done(null, user);
+        throw "User not found";
+    return user;
 };

@@ -12,26 +12,22 @@ const app = express();
 
 passport.use(new strategy(
     async function (username, password, done) {
-        await usersAPI.getUserByUsername(username, async function (err, user) {
-            if (err) {
-                return done(err);
-            }
+        try {
+            let user = await usersAPI.getUserByUsername(username);
+
             if (!user) {
                 return done(null, false, {message: 'Incorrect username.'});
             }
-            let ismatch = false;
 
-            try {
-                ismatch = await bcrypt.compare(password, user.hashed_password);
-            } catch (e) {
-                return done(e);
-            }
-
-            if (!ismatch) {
+            let isMatch = await bcrypt.compare(password, user.hashed_password);
+            if (!isMatch) {
                 return done(null, false, {message: 'Incorrect password.'});
             }
+
             return done(null, user);
-        });
+        } catch (e) {
+            return done(e);
+        }
     })
 );
 
@@ -98,7 +94,7 @@ app.post('/signup', async (req, res) => {
         res.redirect('/signup_err');
     } else {
         try {
-            usersAPI.createUser(req.body.username, req.body.password1, req.body.email, req.body.phone_num);
+            usersAPI.addUser(req.body.username, req.body.password1, req.body.email, req.body.phone_num);
             console.log("Create user success!");
             res.render('body/private');
         } catch (e) {
