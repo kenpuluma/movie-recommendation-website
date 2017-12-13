@@ -94,11 +94,11 @@ app.post('/signup', async (req, res) => {
         res.redirect('/signup_err');
     } else {
         try {
-            usersAPI.addUser(req.body.username, req.body.password1, req.body.email, req.body.phone_num);
+            await usersAPI.addUser(req.body.username, req.body.password1, req.body.email, req.body.phone_num);
             console.log("Create user success!");
             res.render('body/private');
         } catch (e) {
-            const user = usersAPI.getUserByUsername(req.body.username);
+            const user = await usersAPI.getUserByUsername(req.body.username);
             if (user) {
                 res.redirect('/signup_err');
             }
