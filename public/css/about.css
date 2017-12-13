@@ -8,10 +8,11 @@ body {
     color: #555;
     padding-top: 150px;
     
-	background-image: url(../img/header-bg.jpg);
+	background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgHUZnTqpozPAGQhlnHHbgdkKHb9ZpwnMdJ4BOmn9U4xpfibL_-g');
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-attachment: fixed;
+	opacity: 0.9;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -161,4 +162,21 @@ a h6:hover {
 grey {
 	color: #bdc3c7;
 	font-weight: 700;
+}
+
+.bgimg {
+	background-image: url('');
+	opacity: 0.5;
+}
+
+#con {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+#content {
+	opacity: 0.9;
+}
+
+#about {
+	opacity: 0.85;
 }

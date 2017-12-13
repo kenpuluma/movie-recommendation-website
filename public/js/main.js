@@ -10,6 +10,9 @@
      * Initialize
      */
     function init() {
+        //$('#comedy-btn').bind('click', function() {
+            // alert('User clicked on "foo."');
+         //  });
         // Register event listeners
         $('comedy-btn').addEventListener('click', loadComedies);
         $('disaster-btn').addEventListener('click', loadDisasters);
@@ -20,16 +23,16 @@
         $('romantic-btn').addEventListener('click', loadRomantics);
         $('action-btn').addEventListener('click', loadActions);
 
-        var welcomeMsg = $('welcome-msg');
-        welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
-    }
+        // var welcomeMsg = $('welcome-msg');
+        // welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
+    };
 
     // -----------------------------------
     // Helper Functions
     // -----------------------------------
     
     // Get the modal
-    var modal = document.getElementById('id01');
+    var modal = document.getElementById('login-modal');
     
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -37,6 +40,31 @@
             modal.style.display = "none";
         }
     }
+
+    // $(document).ready(function(){
+    //     $("form").submit(function(e) {
+    //         var ref = $(this).find("[required=required]");
+    //         alert('ref');
+    //         $(ref).each(function(){
+    //             if ( $(this).val() == '' ) {
+    //                 alert("Required field should not be blank.");
+    //                 $(this).focus();
+    //                 e.preventDefault();
+    //                 return false;
+    //             }
+    //         });  
+    //         return true;
+    //     });
+    // });
+
+    document.getElementById("login").onclick = function () {
+        location.href = "login";
+    };
+
+    document.getElementById("signup").onclick = function () {
+        location.href = "signup";
+    };
+
     /**
      * A helper function that makes a navigation button active
      * 
@@ -105,6 +133,7 @@
         var displayStyle = style ? style : 'block';
         element.style.display = displayStyle;
     }
+
 
     /**
      * AJAX helper

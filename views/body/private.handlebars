@@ -1,0 +1,116 @@
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Movie Recommendation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/signup.css">
+
+  </head>
+
+  <body>
+    <header class="top-header">
+
+    <nav class="top-nav">
+      <a href="/">Home</a>
+      <a href="">Favorites</a>
+      <a href="/about">About</a>
+    </nav>
+    <button style="width:auto;" id="logout-btn" action="/logout">Log out</button> 
+  
+    <span id="welcome-msg"></span>
+    <i id="avatar" class="avatar fa fa-user fa-2x"></i>
+  </header>
+  
+  <div class="container">
+    <header>
+      <p>
+        <span>Movie</span>
+        <br /> Recommendation
+      </p>
+    </header>
+
+    <section class="main-section">
+      <aside id="item-nav">
+        <div class="nav-icon">
+          <i class="fa fa-film fa-2x"></i>
+        </div>
+        <nav class="main-nav">
+          <a href="#" id="comedy-btn" class="main-nav-btn active">
+            <i class="fa fa-imdb"></i> Comedy
+          </a>
+          <a href="#" id="disaster-btn" class="main-nav-btn">
+            <i class="fa fa-imdb"></i> Disaster film
+          </a>
+          <a href="#" id="crime-btn" class="main-nav-btn">
+            <i class="fa fa-imdb"></i> Crime
+          </a>
+          <a href="#" id="war-btn" class="main-nav-btn">
+            <i class="fa fa-imdb"></i> War
+          </a>
+          <a href="#" id="horror-btn" class="main-nav-btn">
+            <i class="fa fa-imdb"></i> Horror
+          </a>
+          <a href="#" id="science-fiction-btn" class="main-nav-btn">
+            <i class="fa fa-imdb"></i> Science Fiction
+          </a>
+          <a href="#" id="romantic-btn" class="main-nav-btn">
+            <i class="fa fa-imdb"></i> Romantics
+          </a>
+          <a href="#" id="action-btn" class="main-nav-btn">
+            <i class="fa fa-imdb"></i> Action
+          </a>
+        </nav>
+      </aside>
+
+      <ul id="item-list">
+        <li class="item">
+          <img alt="item image" src="data:image/png;base64,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" />
+          <div>
+            <a class="item-name" href="#">Movie</a>
+            <p class="item-category">Dunkirk</p>
+            <div class="stars">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+            </div>
+          </div>
+          <p class="item-address"> <br/>Mountain View<br/> NJ</p>
+          <div class="fav-link">
+            <i class="fa fa-heart"></i>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div>
+  
+  <footer>
+    <p class="title">What We Do</p>
+    <p>"Help you find the best movie around."</p>
+    <ul>
+      <li>
+        <p><i class="fa fa-map-o fa-2x"></i></p>
+        <p>Howe Center, Hoboken, NJ</p>
+      </li>
+      <li>
+        <p><i class="fa fa-envelope-o fa-2x"></i></p>
+        <p>movie@stevens.edu</p>
+      </li>
+      <li>
+        <p><i class="fa fa-phone fa-2x"></i></p>
+        <p>+1 800 123 456</p>
+      </li>
+    </ul>
+  </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://rawgit.com/emn178/js-md5/master/build/md5.min.js"></script>    
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/private.js"></script>
+  </body>

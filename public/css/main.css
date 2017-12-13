@@ -21,7 +21,7 @@ ul {
  */
 .top-header {
 	align-items: center;
-	background: #DF574B;
+	background: rgb(75, 122, 223);
 	box-shadow: 0px 2px 10px #333333;
 	display: flex;
 	height: 60px;
@@ -76,7 +76,7 @@ ul {
 .container>header {
 	align-items: center;
 	background:
-		url('http://prophoto.com.cy/wp-content/galleries/food/food-restaurant-photographer-cyprus-10.jpg')
+		url('https://png.pngtree.com/thumb_back/fw800/back_pic/02/66/12/425789c9ee094f4.jpg')
 		no-repeat 50% 50%;
 	background-size: 100%;
 	display: flex;
@@ -152,8 +152,8 @@ ul {
 	color: #624630;
 	list-style: none;
 	margin-left: 180px;
-	min-height: 250px;
-	padding: 10px;
+	min-height: 540px;
+	padding: 5px;
 }
 
 #item-list .notice {
@@ -257,3 +257,4 @@ footer ul {
 footer ul li {
 	flex: 1;
 }
+

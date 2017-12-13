@@ -1,10 +1,15 @@
 const uuidv4 = require("uuid/v4");
 const mongoCollections = require("./mongoCollections");
 const users = mongoCollections.users;
+const bcrypt=require("bcrypt");
 
-module.exports.addUser = async (user_name, hashed_password, email, phone) => {
+module.exports.addUser = async (user_name, password, email, phone) => {
     if (typeof user_name !== "string" || typeof hashed_password !== "string")
         throw "Username or password is not recognized";
+
+    const saltRounds = 16;
+    let hashed_password = await bcrypt.hash(password, saltRounds);
+
 
     let newUser = {
         _id: uuidv4(),
@@ -161,18 +166,19 @@ module.exports.getAllUsers = async () => {
     return await userCollection.find().toArray();
 };
 
-module.exports.getUserById = async (id) => {
+
+module.exports.getUserById = async (id, done) => {
     const userCollection = await users();
     const user = await userCollection.findOne({_id: id});
     if (!user)
-        throw "User not found";
-    return user;
+        return done(null, null);
+    return done(null, user);
 };
 
-module.exports.getUserByUsername = async (user_name) => {
+module.exports.getUserByUsername = async (user_name, done) => {
     const userCollection = await users();
     const user = await userCollection.findOne({user_name: user_name});
     if (!user)
-        throw "User not found";
-    return user;
+        return done(null, null);
+    return done(null, user);
 };
