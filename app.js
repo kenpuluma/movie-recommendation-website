@@ -13,7 +13,7 @@ const app = express();
 passport.use(new strategy(
     async function (username, password, done) {
         try {
-            let user = await usersAPI.getUserByUsername(username);
+            const user = await usersAPI.getUserByUsername(username);
 
             if (!user) {
                 return done(null, false, {message: 'Incorrect username.'});
@@ -36,12 +36,12 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(async function (_id, done) {
-    await usersAPI.getUserById(_id, function (err, user) {
-        if (err) {
-            return done(err);
-        }
+    const user = await usersAPI.getUserById(_id);
+    try {
         done(null, user);
-    });
+    } catch (e) {
+        return done(e);
+    }
 });
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -62,8 +62,8 @@ app.get('/', (req, res) => {
     res.render('body/homepage', {});
 });
 
-app.get('/login', (req, res) => {
-    res.render('body/private', {message: req.flash('error')});
+app.get('/login', passport.authenticate('local', {failureRedirect: '/', failureFlash: true}), (req, res) => {
+    res.redirect('/private');
 });
 
 // app.get('/signup',(req,res)=>{
@@ -108,7 +108,7 @@ app.post('/signup', async (req, res) => {
 
 app.get('/about', (req, res) => {
     res.render('about', {});
-})
+});
 
 app.get('/signup_err', (req, res) => {
     res.render('body/signup_err', {});
@@ -119,7 +119,7 @@ app.get('/signup_suc', (req, res) => {
 });
 
 app.post('/login', passport.authenticate('local', {failureRedirect: '/', failureFlash: true}), (req, res) => {
-    res.render('body/private');
+    res.redirect('/private');
 });
 
 app.get('/private', (req, res) => {
@@ -136,6 +136,14 @@ app.get('/profile', (req, res) => {
     if (req.user) res.render('body/profile', {user: req.user});
     else res.redirect('/');
 });
+
+app.get('/account_info', (req, res) => {
+    if (req.user) {
+        res.render('body/account_info', {user: req.user});
+    } else {
+        res.redirect("/");
+    }
+})
 
 app.post('/result', (req, res) => {
     if (req.body.filter == "Name") {

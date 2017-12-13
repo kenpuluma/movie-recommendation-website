@@ -7,7 +7,7 @@ module.exports.addUser = async (user_name, password, email, phone) => {
     if (typeof user_name !== "string" || typeof password !== "string")
         throw "Username or password is not recognized";
 
-    const saltRounds = 4;
+    const saltRounds = 16;
     let hashed_password = await bcrypt.hash(password, saltRounds);
 
 
