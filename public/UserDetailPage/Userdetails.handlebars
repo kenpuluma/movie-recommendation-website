@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>User details</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <div class="heading">
+                <div class="heading_nav">
+                    <div class="heading_title">
+                        User details
+                    </div>
+                    <div class="heading_navbar">
+                        <ul>
+                            <li><a href="#">HomePage</a></li>
+                    </div>
+                    <div class="heading_img">
+                        <img src="jokul.jpg">
+                    </div>
+                    <div class="heading_soptlight">
+                        <form>
+                            <input type="text">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="body_title">
+                    <h3>Reviews</h3>
+                </div>
+                <hr/>
+                <hr/>
+                    <div class="info">
+          <ul>
+          <li>My Username: {{user.username}}</li>
+          <li>My Favorite film: {{#each user.favorite_film}} ●{{this}}{{/each}}</li>
+          <li class="content">My Previous Comments: 
+                {{#user.comments}}
+                <p>Film: {{film_name}}</p> 
+                <p>My comments: {{comment}}</p>
+                <p class="time">Comment time: {{time}}</p>
+                {{/user.comments}}
+          </li>
+          </ul>
+          <a href="/private" class="back">Back to Home Page</a>
+    </div>
+            </div>
+        </div>
+        <div class="footing">
+            @Stevens
+        </div>
+    </div>
+</body>
+</html>
