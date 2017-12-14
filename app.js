@@ -6,8 +6,9 @@ const strategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 const bcrypt = require("bcrypt");
-const moviesAPI =require('./db/movies.js');
+
 const usersAPI = require("./db/users.js");
+const moviesAPI = require("./db/movies.js");
 const app = express();
 
 passport.use(new strategy(
@@ -59,6 +60,26 @@ app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
     res.render('body/homepage', {});
+});
+
+app.get('/movie_genre', async (req, res) => {
+	const moviesList = await moviesAPI.getAllMovies();
+
+    if (moviesList) {
+    	for(var i=0;i<moviesList.length;i++){
+    		
+		 	moviesList[i].rating = moviesList[i].avg_score * 12.4 + 'px';
+
+
+		 	moviesList[i].image_url = moviesList[i].galleries[0];
+		 	
+		 	console.log(i + ":" + moviesList[i].image_url);
+		}
+
+		console.log(moviesList[0].image_url);
+		
+        res.render('body/movie_description', moviesList[0]);
+    }
 });
 
 app.get('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
@@ -127,17 +148,14 @@ app.get('/search', (req, res) => {
     else res.redirect('/');
 });
 
+app.get('/profile', (req, res) => {
+    if (req.user) res.render('body/profile', {user: req.user});
+    else res.redirect('/');
+});
+
 app.get('/account_info', (req, res) => {
     if (req.user) {
         res.render('body/account_info', {user: req.user});
-    } else {
-        res.redirect("/");
-    }
-})
-
-app.get('/favorites', (req, res) => {
-    if (req.user) {
-        res.render('body/favorites', {user: req.user});
     } else {
         res.redirect("/");
     }
@@ -205,12 +223,13 @@ app.post('/add_to_fav', (req, res) => {
         res.render('body/comment', {film: film, user: req.user});
     });
 });
-
+/*
 app.use(async (req, res, next) => {
     var err = new Error('File Not Found');
     err.status = 404;
     await next(err);
-});
+});*/
+
 
 app.listen(3000, () => {
     console.log("We've now got a server!");
