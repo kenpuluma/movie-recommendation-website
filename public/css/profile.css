@@ -1,0 +1,51 @@
+
+body {
+    height:100%;
+    margin: 0;  
+    background-image: url(../img/wood.jpg);    
+    background-repeat:no-repeat;  
+        background-position:0% 0%;  
+    background-size:cover;  
+}
+
+h1{
+    color:white;
+    position:absolute;
+    top:12%;
+    left:34%;
+}
+
+.info{
+    color:white;
+    font-size:20px;
+    height:700px;
+    width:500px;
+    position:absolute;
+    top:30%;
+    left:32%;
+}
+
+.back{
+    color:white;
+    font-size:20px;
+    position:relative;
+    left:100%;
+}
+
+.info li{
+    margin-bottom:15px;
+}
+
+.info .time .content{
+    margin-bottom:20px;
+}
+
+button {
+    background-color: rgb(78, 76, 175);
+    color: white;
+    padding: 14px 20px;
+    margin-top: 15px;
+    margin-bottom: 12px;
+    border: none;
+    cursor: pointer;
+}
