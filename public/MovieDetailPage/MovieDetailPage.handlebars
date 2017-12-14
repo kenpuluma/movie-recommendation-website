@@ -1,0 +1,37 @@
+<div id="MovieInfo" class="modal">
+  <form class="modal-content animate" action="/action_page.php">
+    
+    <div class="movie_top">
+      <div class="movie_img_container">
+        <img id="MovieImg" src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=62097275,115241742&fm=27&gp=0.jpg" alt="Avatar" class="avatar">
+      </div>
+
+      <div class="movie_content_container">
+        <span class="topic">Ó¢Â×¶Ô¾ö</span><br />
+	<span class="content">level:</span>
+	<div id="bg"><!--ÕâÀïÊÇ±³¾°£¬Ò²¾ÍÊÇ»ÒÉ«µÄÐÇÐÇ-->
+
+
+          <div>
+          <ul class="info">
+          <li>title: {{movie.title}}</li>
+          <li>released date: {{movie.released_date}}</li>
+          <li>Actors: {{#each movie.actors}} ●{{this}}{{/each}}</li>
+          <li>Director: {{movie.director}}</li>
+          <li>galleries: {{#each movie.galleries}} ●{{this}}{{/each}}</li>
+          <li>comments: {{#each movie.comments}} ●{{this}}{{/each}}</li>
+          <li>rating: {movie.rating}}</li>
+          <li>avg_score: {movie.avg_score}}</li>
+          </ul>
+        </div>
+
+
+    </div>
+
+    <div align="center" class="movie_footer" style="background-color:#f1f1f1">
+       <button align="center" id="confirm" style="height=20px;width=100px;" type="button" onclick="document.getElementById('MovieInfo').style.display='none'">Cancel</button>
+    </div>
+    
+    
+  </form>
+  </div>
