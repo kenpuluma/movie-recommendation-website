@@ -8,13 +8,6 @@ body {
     background-size:cover;  
 }
 
-h1{
-    color:white;
-    position:absolute;
-    top:12%;
-    left:34%;
-}
-
 .info{
     color:white;
     font-size:20px;
@@ -41,7 +34,7 @@ h1{
 }
 
 button {
-    background-color: rgb(78, 76, 175);
+    background-color: rgb(76, 127, 175);
     color: white;
     padding: 14px 20px;
     margin-top: 15px;
