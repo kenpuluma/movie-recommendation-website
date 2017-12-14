@@ -11,7 +11,7 @@ const usersAPI = require("./db/users.js");
 const app = express();
 
 passport.use(new strategy(
-    async function (username, password, done) {
+    async (username, password, done) => {
         try {
             const user = await usersAPI.getUserByUsername(username);
 
@@ -23,7 +23,6 @@ passport.use(new strategy(
             if (!isMatch) {
                 return done(null, false, {message: 'Incorrect password.'});
             }
-
             return done(null, user);
         } catch (e) {
             return done(e);
@@ -62,7 +61,7 @@ app.get('/', (req, res) => {
     res.render('body/homepage', {});
 });
 
-app.get('/login', passport.authenticate('local', {failureRedirect: '/', failureFlash: true}), (req, res) => {
+app.get('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
     res.redirect('/private');
 });
 
@@ -114,11 +113,7 @@ app.get('/signup_err', (req, res) => {
     res.render('body/signup_err', {});
 });
 
-app.get('/signup_suc', (req, res) => {
-    res.render('body/signup_suc', {});
-});
-
-app.post('/login', passport.authenticate('local', {failureRedirect: '/', failureFlash: true}), (req, res) => {
+app.post('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
     res.redirect('/private');
 });
 
