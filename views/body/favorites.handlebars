@@ -1,0 +1,49 @@
+ {{#if user }}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    
+    <title>Profile</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">  
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="css/main.css">
+    <link  rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <header class="top-header">
+    <nav class="top-nav">
+      <a href="/private">Home</a>
+      <a href="/account_info">Profile</a>
+      <a href="/favorites">Favorites</a>
+      <a href="/about">About</a>
+    </nav>
+    <button style="width:auto;" id="logout-btn" action="/logout">Log out</button> 
+  
+    <span id="welcome-msg">Welcome, {{user.user_name}}</span>
+    <i id="avatar" class="avatar fa fa-user fa-2x"></i>
+    </header>
+
+    <h1>My Profile</h1>
+    <div class="info">
+          <ul>
+          <li>My Favorite film: {{#each user.favorites}} ●{{this}}{{/each}}</li>
+          <li class="content">My Previous Comments: 
+                {{#user.comments}}
+                <p>Film: {{film_name}}</p> 
+                <p>My comments: {{comment}}</p>
+                <p class="time">Comment time: {{time}}</p>
+                {{/user.comments}}
+          </li>
+          </ul>
+          <a href="/private" class="back">Back to Home Page</a>
+    </div>
+    <script src="js/private.js"></script>
+</body>
+{{/if}}
+ 
