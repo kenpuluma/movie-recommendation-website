@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Movie Recommendation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!-- Custom styles for this template -->
+    <link href="css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/movieDetail.css">
+  </head>
+
+  <body>
+   
+  <div id="MovieInfo" class="modela">
+    <div class="movie_top">
+      <div class="movie_img_container">
+        <img id="MovieImg" src="https://image.tmdb.org/t/p/original/iBlfxlw8qwtUS0R8YjIU7JtM6LM.jpg">
+      </div>
+
+      <div class="movie_content_container">
+        <span id="movie_name" class="topic">{{image_url}}</span><br/>
+        <span class="content">{{rating:}}</span>
+        <div id="bg"><!--ÕâÀïÊÇ±³¾°£¬Ò²¾ÍÊÇ»ÒÉ«µÄÐÇÐÇ-->
+          <!--ËµÃ÷£¬ÕâÀïµÄwidth¾ÍÊÇÉèÖÃ·ÖÊýÀ²£¬ÒÔÎÒÐ´µÄÎªÀý£¬Ò»¸öÐÇÐÇµÄ³¤¶ÈÊÇ12px£¬Ò²¾ÍÊÇ1·Ö12px£¬Èç¹ûÊÇ4.3·Ö£¬¾ÍÊÇ4.3*12px = 51.6pxµÄ³¤¶È£¬µ±È»Õâ¸öÒ»°ãÊÇÈ¡µÃÊý¾ÝºóÓÃjs»òÕßÆäËûÄ£°åÓïÑÔÈ¥¿ØÖÆµÄ-->
+          <div id="over" style="width:{{rating}}"></div><!--ÕâÀïÊÇÕÚÕÖ£¬ÉèÖÃ¿í¶ÈÒÔ´ïµ½ÆÀ·ÖµÄÐ§¹û-->
+            </div>
+                <span class="content">category:</span>
+                <span id="movie_category" class="content">{{genres.[0]}}</span>
+                <br /><span class="content">year:</span>
+                <span id="movie_year" class="content">{{released_date}}</span>
+                <br /><span class="content">director:</span>
+                <span id="movie_director" class="content">{{director}}</span>
+                <br /><span class="content">main actor:</span>
+                <span id="movie_actor" class="content">{{actors.[0]}}</span>
+                <br /><span class="comments">comments:</span><br />
+                <span id="movie_comments" class="content">{{comments.[0]}}</span>
+              </div>
+          </div>
+  </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://rawgit.com/emn178/js-md5/master/build/md5.min.js"></script>    
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</html>
