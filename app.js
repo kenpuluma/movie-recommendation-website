@@ -6,7 +6,7 @@ const strategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 const bcrypt = require("bcrypt");
-
+const moviesAPI =require('./db/movies.js');
 const usersAPI = require("./db/users.js");
 const app = express();
 
@@ -127,14 +127,17 @@ app.get('/search', (req, res) => {
     else res.redirect('/');
 });
 
-app.get('/profile', (req, res) => {
-    if (req.user) res.render('body/profile', {user: req.user});
-    else res.redirect('/');
-});
-
 app.get('/account_info', (req, res) => {
     if (req.user) {
         res.render('body/account_info', {user: req.user});
+    } else {
+        res.redirect("/");
+    }
+})
+
+app.get('/favorites', (req, res) => {
+    if (req.user) {
+        res.render('body/favorites', {user: req.user});
     } else {
         res.redirect("/");
     }
@@ -202,13 +205,12 @@ app.post('/add_to_fav', (req, res) => {
         res.render('body/comment', {film: film, user: req.user});
     });
 });
-/*
+
 app.use(async (req, res, next) => {
     var err = new Error('File Not Found');
     err.status = 404;
     await next(err);
-});*/
-
+});
 
 app.listen(3000, () => {
     console.log("We've now got a server!");
