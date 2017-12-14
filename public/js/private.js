@@ -1,13 +1,6 @@
 (function() {
     
         /**
-         * Variables
-         */
-        
-        var user_id = '1111';
-        var user_fullname = 'mark';
-    
-        /**
          * Initialize
          */
         function init() {
@@ -23,10 +16,8 @@
             $('science-fiction-btn').addEventListener('click', loadScienceFictions);
             $('romantic-btn').addEventListener('click', loadRomantics);
             $('action-btn').addEventListener('click', loadActions);
-    
-            var welcomeMsg = $('welcome-msg');
-            welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
-        };
+
+        }
     
         // -----------------------------------
         // Helper Functions
