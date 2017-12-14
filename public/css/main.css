@@ -124,7 +124,7 @@ ul {
 	border-top: 1px solid #FFFFFF;
 	color: #FFFFFF;
 	display: block;
-	padding: 20px;
+	padding: 18px;
 	text-align: left;
 	text-decoration: none;
 }
@@ -256,4 +256,3 @@ footer ul {
 footer ul li {
 	flex: 1;
 }
-
