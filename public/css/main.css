@@ -56,10 +56,6 @@ ul {
 	text-decoration: none;
 }
 
-#welcome-msg {
-	padding-right: 10px;
-}
-
 /**
  * main container
  */
@@ -110,6 +106,9 @@ ul {
 	width: 180px;
 }
 
+#welcome-msg {
+	padding: 5px;
+}
 .nav-icon {
 	color: #624630;
 	padding: 20px;
@@ -256,3 +255,4 @@ footer ul {
 footer ul li {
 	flex: 1;
 }
+
