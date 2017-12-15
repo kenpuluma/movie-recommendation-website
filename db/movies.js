@@ -10,11 +10,20 @@ module.exports.addMovie = async (title, released_date, director, rating, actors,
         actors = [];
     if (!Array.isArray(genres))
         genres = [];
+    var monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"];
     if (released_date) {
         const timestamp = Date.parse(released_date);
 
         if (isNaN(timestamp) === false) {
-            released_date = new Date(timestamp);
+            date = new Date(timestamp);
+            var day = date.getDate();
+            var monthIndex = date.getMonth();
+            var year = date.getFullYear();
+            released_date = monthNames[monthIndex] + '-' + day + '-' + year;
         }
     }
 
