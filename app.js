@@ -6,9 +6,8 @@ const strategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 const bcrypt = require("bcrypt");
-
+const moviesAPI =require('./db/movies.js');
 const usersAPI = require("./db/users.js");
-const moviesAPI = require("./db/movies.js");
 const app = express();
 
 passport.use(new strategy(
@@ -62,28 +61,63 @@ app.get('/', (req, res) => {
     res.render('body/homepage', {});
 });
 
-app.get('/movie_genre', async (req, res) => {
-	const moviesList = await moviesAPI.getAllMovies();
-
-    if (moviesList) {
-    	for(var i=0;i<moviesList.length;i++){
-    		
-		 	moviesList[i].rating = moviesList[i].avg_score * 12.4 + 'px';
+app.get('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
+    res.redirect('/private');
+});
 
 
-		 	moviesList[i].image_url = moviesList[i].galleries[0];
-		 	
-		 	console.log(i + ":" + moviesList[i].image_url);
-		}
+app.get('/show_movies_by_genre', async (req, res) => {
+    try {
+        const movie = await moviesAPI.getMovieById(req.query.id);
+        if (movie) {
+            movie.image_url = movie.galleries[0];
 
-		console.log(moviesList[0].image_url);
-		
-        res.render('body/movie_description', moviesList[0]);
+            movie.rating = movie.avg_score * 12.4 + 'px';
+
+            res.render('body/movie_description', movie);
+        }
+    }catch(e)
+    {
+        res.send({"result":"failed"});
     }
 });
 
-app.get('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
-    res.redirect('/private');
+app.get('/get_movies_by_genre', async (req, res) => {
+    try {
+        const moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
+        if (moviesList) {
+            var moviesJson = JSON.stringify(moviesList);
+            res.send(moviesJson);
+        }
+    }catch(e){
+        res.send({"result":"failed"});
+    }
+});
+
+app.post('/favorite', async (req, res) => {
+    var user_id = req.body.user_id;
+    var item_id = req.body.favorite;
+    
+    console.log(req.body);
+    try {
+        await usersAPI.addFavorite(user_id, item_id);
+        res.send({"result":"SUCCESS"});
+    }catch(e){
+        res.send({"result":"failed"});
+    }
+});
+
+app.delete('/favorite', async (req, res) => {
+    var user_id = req.body.user_id;
+    var item_id = req.body.favorite;
+    
+    console.log(req.body);
+    try {
+        await usersAPI.removeFavorite(user_id, item_id);
+        res.send({"result":"SUCCESS"});
+    }catch(e){
+        res.send({"result":"failed"});
+    }
 });
 
 // app.get('/signup',(req,res)=>{
@@ -130,6 +164,24 @@ app.get('/about', (req, res) => {
     res.render('about', {});
 });
 
+app.get('/movie_genre', async (req, res) => {
+    var genre = "comedy";
+	const moviesList = await moviesAPI.getMovieByGenre(genre);
+    if (moviesList) {
+    	for(var i = 0;i < moviesList.length; i++){
+    		
+		 	moviesList[i].rating = moviesList[i].avg_score * 12.4 + 'px';
+
+
+		 	moviesList[i].image_url = moviesList[i].galleries[0];
+		 	
+		 	console.log(i + ":" + moviesList[i].image_url);
+		}
+		
+        res.render('body/movie_description', moviesList[0]);
+    }
+});
+
 app.get('/signup_err', (req, res) => {
     res.render('body/signup_err', {});
 });
@@ -148,14 +200,17 @@ app.get('/search', (req, res) => {
     else res.redirect('/');
 });
 
-app.get('/profile', (req, res) => {
-    if (req.user) res.render('body/profile', {user: req.user});
-    else res.redirect('/');
-});
-
 app.get('/account_info', (req, res) => {
     if (req.user) {
         res.render('body/account_info', {user: req.user});
+    } else {
+        res.redirect("/");
+    }
+})
+
+app.get('/favorites', (req, res) => {
+    if (req.user) {
+        res.render('body/favorites', {user: req.user});
     } else {
         res.redirect("/");
     }
@@ -223,13 +278,12 @@ app.post('/add_to_fav', (req, res) => {
         res.render('body/comment', {film: film, user: req.user});
     });
 });
-/*
+
 app.use(async (req, res, next) => {
     var err = new Error('File Not Found');
     err.status = 404;
     await next(err);
-});*/
-
+});
 
 app.listen(3000, () => {
     console.log("We've now got a server!");
