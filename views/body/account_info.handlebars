@@ -9,7 +9,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">  
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/main.css">
@@ -34,8 +34,8 @@
           <ul>
           <li>My ID: {{user._id}} </li>
           <li>My Username: {{user.user_name}}</li>
-          <li>My Email: {{user.email}}</li>
-          <li>My Phone#: {{user.phone}}</li>
+          <li>My Email: {{user.profile.email}}</li>
+          <li>My Phone#: {{user.profile.phone}}</li>
           </ul>
           <a href="/private" class="back">Back to Home Page</a>
     </div>
