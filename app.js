@@ -109,6 +109,24 @@ app.get('/about', (req, res) => {
     res.render('about', {});
 });
 
+app.get('/movie_genre', async (req, res) => {
+    var genre = "comedy";
+	const moviesList = await moviesAPI.getMovieByGenre(genre);
+    if (moviesList) {
+    	for(var i = 0;i < moviesList.length; i++){
+    		
+		 	moviesList[i].rating = moviesList[i].avg_score * 12.4 + 'px';
+
+
+		 	moviesList[i].image_url = moviesList[i].galleries[0];
+		 	
+		 	console.log(i + ":" + moviesList[i].image_url);
+		}
+		
+        res.render('body/movie_description', moviesList[0]);
+    }
+});
+
 app.get('/signup_err', (req, res) => {
     res.render('body/signup_err', {});
 });
