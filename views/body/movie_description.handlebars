@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Movie Recommendation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/movieDetail.css">
+  </head>
+
+  <body>
+   
+  <div id="MovieInfo" class="modela">
+    <div class="movie_top">
+      <div class="movie_img_container">
+        <img id="MovieImg" src='{{galleries.[0]}}'>
+      </div>
+
+      <div class="movie_content_container">
+         <span class="content">Movie name:</span>
+        <span id="movie_name" class="topic">{{title}}</span><br/>
+        <span class="content">{{rating:}}</span>
+        <div id="bg">
+          <div id="over" style="width:{{rating}}"></div>
+            </div>
+                <span class="content">Genre:</span>
+                <span id="movie_genre" class="content">{{genres}}</span> 
+                <br /><span class="content">Released date:</span>
+                <span id="movie_year" class="content">{{released_date}}</span>
+                <br /><span class="content">Director:</span>
+                <span id="movie_director" class="content">{{director}}</span>
+                <br /><span class="content">Main actors:</span>
+                <span id="movie_actor" class="content">{{actors}}</span>
+                <br /><span class="comments">comments:</span><br />
+                <span id="movie_comments" class="content">{{comments.[0]}}</span>
+              </div>
+          </div>
+  </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://rawgit.com/emn178/js-md5/master/build/md5.min.js"></script>    
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</html>
