@@ -1,6 +1,10 @@
 (function() {
     
         /**
+         * Variables
+         */
+        
+        /**
          * Initialize
          */
         function init() {
@@ -17,7 +21,9 @@
             $('romantic-btn').addEventListener('click', loadRomantics);
             $('action-btn').addEventListener('click', loadActions);
 
-        }
+            loadComedies();
+    
+        };
     
         // -----------------------------------
         // Helper Functions
@@ -137,7 +143,7 @@
                 xhr.send(data);
             }
         }
-    
+
         // -------------------------------------
         // AJAX call server-side APIs
         // -------------------------------------
@@ -146,8 +152,8 @@
             activeBtn('comedy-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=comedy';
             var req = JSON.stringify({});
     
             // display loading message
@@ -156,6 +162,7 @@
             // make AJAX call
             ajax('GET', url + '?' + params, req, (res) => {
                 var items = JSON.parse(res);
+    
                 if (!items || items.length === 0) {
                     showWarningMessage('No comedies.');
                 } else {
@@ -170,8 +177,8 @@
             activeBtn('disaster-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=disaster';
             var req = JSON.stringify({});
     
             // display loading message
@@ -194,8 +201,8 @@
             activeBtn('crime-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=crime';
             var req = JSON.stringify({});
     
             // display loading message
@@ -218,8 +225,8 @@
             activeBtn('war-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=war';
             var req = JSON.stringify({});
     
             // display loading message
@@ -242,8 +249,8 @@
             activeBtn('horror-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=horror';
             var req = JSON.stringify({});
     
             // display loading message
@@ -266,8 +273,8 @@
             activeBtn('science-fiction-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=science-fiction';
             var req = JSON.stringify({});
     
             // display loading message
@@ -290,8 +297,8 @@
             activeBtn('romantic-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=romantics';
             var req = JSON.stringify({});
     
             // display loading message
@@ -314,8 +321,8 @@
             activeBtn('action-btn');
     
             // The request parameters
-            var url = './history';
-            var params = 'user_id=' + user_id;
+            var url = './get_movies_by_genre';
+            var params = 'genre=action';
             var req = JSON.stringify({});
     
             // display loading message
@@ -333,7 +340,184 @@
                 showErrorMessage('Cannot load actions.');
             });
         }
-
+    
+       
+    
+        /**
+         * API #4 Toggle favorite (or visited) items
+         * 
+         * @param item_id -
+         *            The item business id
+         * 
+         * API end point: [POST]/[DELETE] /Dashi/history request json data: {
+         * user_id: 1111, visited: [a_list_of_business_ids] }
+         */
+        function changeFavoriteItem(item_id) {
+            // Check whether this item has been visited or not
+            var li = $('item-' + item_id);
+            var favIcon = $('fav-icon-' + item_id);
+            var favorite = li.dataset.favorite !== 'true';
+    
+            // The request parameters
+            var url = './favorite';
+            var req = JSON.stringify({
+                user_id: user_id,
+                favorite: item_id
+            });
+            var method = favorite ? 'POST' : 'DELETE';
+    
+            ajax(method, url, req,
+                // successful callback
+                function(res) {
+                    var result = JSON.parse(res);
+                    console.log(result);
+                    if (result.result === 'SUCCESS') {
+                        li.dataset.favorite = favorite;
+                        favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
+                    }
+                });
+        }
+    
+        function onShowMovies(movie_id)
+        {
+            // The request parameters
+            var url = 'show_movies_by_genre';
+            var params = 'id=' + movie_id;
+            var req = JSON.stringify({});
+            var prev = window.location.href.replace('#','');
+            prev = prev.replace('private','');
+            location.href = url + '?' + params;
+            //、window.open(prev + url + '?' + params);
+        }
+    
+        // -------------------------------------
+        // Create item list
+        // -------------------------------------
+    
+        /**
+         * List items
+         * 
+         * @param items -
+         *            An array of item JSON objects
+         */
+        function listItems(items) {
+            // Clear the current results
+            var itemList = $('item-list');
+            itemList.innerHTML = '';
+    
+            for (var i = 0; i < items.length; i++) {
+                addItem(itemList, items[i]);
+            }
+        }
+    
+        /**
+         * Add item to the list
+         * 
+         * @param itemList -
+         *            The
+         *            <ul id="item-list">
+         *            tag
+         * @param item -
+         *            The item data (JSON object)
+         */
+        function addItem(itemList, item) {
+            var item_id = item._id;
+    
+            // create the <li> tag and specify the id and class attributes
+            var li = $('li', {
+                id: 'item-' + item_id,
+                className: 'item'
+            });
+    
+            // set the data attribute
+            li.dataset.item_id = item_id;
+            li.dataset.favorite = item.favorite;
+    
+            // item image
+            if (item.galleries) {
+                li.appendChild($('img', {
+                    src: item.galleries[0]
+                }));
+            } else {
+                li.appendChild($(
+                    'img', {
+                        src: 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png'
+                    }))
+            }
+            // section
+            var section = $('div', {});
+    
+            // title
+            var title = $('a', {
+                href: item.url,
+                target: '_blank',
+                className: 'item-name'
+            });
+            title.innerHTML = item.title;
+            title.onclick = function() {
+                onShowMovies(item_id);
+                return false;
+            };
+    
+            section.appendChild(title);
+    
+            // category
+            var category = $('p', {
+                className: 'item-category'
+            });
+            category.innerHTML = 'Category: ' + item.genres.join(', ');
+            section.appendChild(category);
+    
+            // TODO(vincent). here we might have a problem showing 3.5 as 3.
+            // stars
+            var stars = $('div', {
+                className: 'stars'
+            });
+    
+            console.log('item.avg_score:' + item.avg_score);
+            for (var i = 0; i < item.avg_score; i++) {
+                var star = $('i', {
+                    className: 'fa fa-star'
+                });
+                stars.appendChild(star);
+            }
+    
+            if (('' + item.avg_score).match(/\.5$/)) {
+                stars.appendChild($('i', {
+                    className: 'fa fa-star-half-o'
+                }));
+            }
+    
+            section.appendChild(stars);
+    
+            li.appendChild(section);
+    
+            // address
+            var date = $('p', {
+                className: 'item-address'
+            });
+    
+            date.innerHTML = item.released_date;
+            li.appendChild(date);
+    
+            // favorite link
+            var favLink = $('p', {
+                className: 'fav-link'
+            });
+    
+            favLink.onclick = function() {
+                changeFavoriteItem(item_id);
+            };
+    
+            favLink.appendChild($('i', {
+                id: 'fav-icon-' + item_id,
+                className: item.favorite ? 'fa fa-heart' : 'fa fa-heart-o'
+            }));
+    
+            li.appendChild(favLink);
+    
+            itemList.appendChild(li);
+        }
     
         init();
     
