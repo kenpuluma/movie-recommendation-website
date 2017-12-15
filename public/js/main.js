@@ -25,6 +25,7 @@
 
         // var welcomeMsg = $('welcome-msg');
         // welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
+        loadComedies();
     };
 
     // -----------------------------------
@@ -182,8 +183,8 @@
         activeBtn('comedy-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=comedy';
         var req = JSON.stringify({});
 
         // display loading message
@@ -192,6 +193,7 @@
         // make AJAX call
         ajax('GET', url + '?' + params, req, (res) => {
             var items = JSON.parse(res);
+
             if (!items || items.length === 0) {
                 showWarningMessage('No comedies.');
             } else {
@@ -206,8 +208,8 @@
         activeBtn('disaster-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=disaster';
         var req = JSON.stringify({});
 
         // display loading message
@@ -230,8 +232,8 @@
         activeBtn('crime-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=crime';
         var req = JSON.stringify({});
 
         // display loading message
@@ -254,8 +256,8 @@
         activeBtn('war-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=war';
         var req = JSON.stringify({});
 
         // display loading message
@@ -278,8 +280,8 @@
         activeBtn('horror-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=horror';
         var req = JSON.stringify({});
 
         // display loading message
@@ -302,8 +304,8 @@
         activeBtn('science-fiction-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=science-fiction';
         var req = JSON.stringify({});
 
         // display loading message
@@ -326,8 +328,8 @@
         activeBtn('romantic-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=romantic';
         var req = JSON.stringify({});
 
         // display loading message
@@ -350,8 +352,8 @@
         activeBtn('action-btn');
 
         // The request parameters
-        var url = './history';
-        var params = 'user_id=' + user_id;
+        var url = './get_movies_by_genre';
+        var params = 'genre=action';
         var req = JSON.stringify({});
 
         // display loading message
@@ -388,10 +390,10 @@
         var favorite = li.dataset.favorite !== 'true';
 
         // The request parameters
-        var url = './history';
+        var url = './favorite';
         var req = JSON.stringify({
             user_id: user_id,
-            favorite: [item_id]
+            favorite: item_id
         });
         var method = favorite ? 'POST' : 'DELETE';
 
@@ -399,11 +401,23 @@
             // successful callback
             function(res) {
                 var result = JSON.parse(res);
+                console.log(result);
                 if (result.result === 'SUCCESS') {
                     li.dataset.favorite = favorite;
                     favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
                 }
             });
+    }
+
+    function onShowMovies(movie_id)
+    {
+        // The request parameters
+        var url = 'show_movies_by_genre';
+        var params = 'id=' + movie_id;
+        var req = JSON.stringify({});
+        var prev = window.location.href.replace('#','');
+
+        window.open(prev + url + '?' + params);
     }
 
     // -------------------------------------
@@ -437,7 +451,7 @@
      *            The item data (JSON object)
      */
     function addItem(itemList, item) {
-        var item_id = item.item_id;
+        var item_id = item._id;
 
         // create the <li> tag and specify the id and class attributes
         var li = $('li', {
@@ -450,9 +464,9 @@
         li.dataset.favorite = item.favorite;
 
         // item image
-        if (item.image_url) {
+        if (item.galleries) {
             li.appendChild($('img', {
-                src: item.image_url
+                src: item.galleries[0]
             }));
         } else {
             li.appendChild($(
@@ -469,14 +483,19 @@
             target: '_blank',
             className: 'item-name'
         });
-        title.innerHTML = item.name;
+        title.innerHTML = item.title;
+        title.onclick = function() {
+            onShowMovies(item_id);
+            return false;
+        };
+
         section.appendChild(title);
 
         // category
         var category = $('p', {
             className: 'item-category'
         });
-        category.innerHTML = 'Category: ' + item.categories.join(', ');
+        category.innerHTML = 'Category: ' + item.genres.join(', ');
         section.appendChild(category);
 
         // TODO(vincent). here we might have a problem showing 3.5 as 3.
@@ -485,14 +504,15 @@
             className: 'stars'
         });
 
-        for (var i = 0; i < item.rating; i++) {
+        console.log('item.avg_score:' + item.avg_score);
+        for (var i = 0; i < item.avg_score; i++) {
             var star = $('i', {
                 className: 'fa fa-star'
             });
             stars.appendChild(star);
         }
 
-        if (('' + item.rating).match(/\.5$/)) {
+        if (('' + item.avg_score).match(/\.5$/)) {
             stars.appendChild($('i', {
                 className: 'fa fa-star-half-o'
             }));
@@ -503,13 +523,12 @@
         li.appendChild(section);
 
         // address
-        var address = $('p', {
+        var date = $('p', {
             className: 'item-address'
         });
 
-        address.innerHTML = item.address.replace(/,/g, '<br/>').replace(/\"/g,
-            '');
-        li.appendChild(address);
+        date.innerHTML = item.released_date;
+        li.appendChild(date);
 
         // favorite link
         var favLink = $('p', {
