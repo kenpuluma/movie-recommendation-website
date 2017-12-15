@@ -1,14 +1,13 @@
 
 
 body {
-  	background-color: #f2f2f2;
     font-family: "Lato";
     font-weight: 300;
     font-size: 16px;
     color: #555;
     padding-top: 150px;
     
-	background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgHUZnTqpozPAGQhlnHHbgdkKHb9ZpwnMdJ4BOmn9U4xpfibL_-g');
+	background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIQjvPjIOuGnHeLSwhRWtH96bXs9zflwHnnusz1A6Bz7zASUec');
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-attachment: fixed;
@@ -82,7 +81,6 @@ a:after {
 }
 
 .w {
-	background-color: #ffffff;
 	border: 1px solid #dddddd;
 	-moz-box-shadow: 5px 5px rgba(0,0,0,0.2);
 	-webkit-box-shadow: 5px 5px rgba(0,0,0,0.2);
@@ -108,7 +106,6 @@ a:after {
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
 	color: #555555;
 	cursor: default;
-	background-color: #ffffff;
 	border-left: 5px solid #1abc9c;
 	border-bottom-color: transparent;
 	border-top-color: transparent;
@@ -122,11 +119,10 @@ a:after {
 	border-bottom: 1px solid #dddddd;
 	border-radius: 0 0 0 0;
 	width: 100%;
-	background-color: #f2f2f2;
+
 }
 
 .tab-content {
-	background-color: #ffffff;
 	padding-left: 15px;
 	padding-top: 20px;
 	padding-right: 15px;
