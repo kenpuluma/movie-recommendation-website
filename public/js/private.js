@@ -153,12 +153,13 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=comedy';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=comedy&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
             showLoadingMessage('Loading comedies...');
-    
+
             // make AJAX call
             ajax('GET', url + '?' + params, req, (res) => {
                 var items = JSON.parse(res);
@@ -178,7 +179,8 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=disaster';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=disaster&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
@@ -202,7 +204,8 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=crime';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=crime&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
@@ -226,7 +229,8 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=war';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=war&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
@@ -250,7 +254,8 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=horror';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=horror&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
@@ -274,7 +279,8 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=science-fiction';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=science-fiction&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
@@ -298,7 +304,8 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=romantics';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=romantics&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
@@ -322,7 +329,8 @@
     
             // The request parameters
             var url = './get_movies_by_genre';
-            var params = 'genre=action';
+            var user_id = $('user_id').innerHTML;
+            var params = 'genre=action&user_id=' + user_id;
             var req = JSON.stringify({});
     
             // display loading message
@@ -359,6 +367,7 @@
             var favorite = li.dataset.favorite !== 'true';
     
             // The request parameters
+            var user_id = $('user_id').innerHTML;
             var url = './favorite';
             var req = JSON.stringify({
                 user_id: user_id,
@@ -370,7 +379,7 @@
                 // successful callback
                 function(res) {
                     var result = JSON.parse(res);
-                    console.log(result);
+
                     if (result.result === 'SUCCESS') {
                         li.dataset.favorite = favorite;
                         favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
@@ -474,7 +483,6 @@
                 className: 'stars'
             });
     
-            console.log('item.avg_score:' + item.avg_score);
             for (var i = 0; i < item.avg_score; i++) {
                 var star = $('i', {
                     className: 'fa fa-star'
