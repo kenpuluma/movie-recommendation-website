@@ -30,30 +30,31 @@
             <a href="/favorites">Favorites</a>
             <a href="/about">About</a>
         </nav>
-        <button style="width:auto;" id="logout-btn" action="/logout">Log out</button> 
     
         <i id="avatar" class="avatar fa fa-user fa-2x"></i>
     </header>
     {{/if}}
 
     <div class="img">
-    <img src="{{galleries.[0]}}"></img>
+    <img src="{{movie.galleries.[0]}}"></img>
     </div>
     <div class="info">
       <h1>{{title}}</h1>
         <span class="content">Genre:</span>
-        <span id="movie_genre" class="content">{{genres}}</span>
+        <span id="movie_genre" class="content">{{movie.genres}}</span>
         <br /><span class="content">Rating:</span>
-        <span id="movie_rating" class="content">{{rating}}</span>  
+        <span id="movie_rating" class="content">{{movie.rating}}</span>  
         <br /><span class="content">Released date:</span>
-        <span id="movie_year" class="content">{{released_date}}</span>
+        <span id="movie_year" class="content">{{movie.released_date}}</span>
         <br /><span class="content">Director:</span>
-        <span id="movie_director" class="content">{{director}}</span>
+        <span id="movie_director" class="content">{{movie.director}}</span>
         <br /><span class="content">Main actors:</span>
-        <span id="movie_actor" class="content">{{actors}}</span>
+        <span id="movie_actor" class="content">{{movie.actors}}</span>
         <br /><span class="content">Comments:</span>
-        <span id="movie_comments" class="content">{{comments.[0]}}</span>
-    </div> 
+        <span id="movie_comments" class="content">{{movie.comments}}</span>
+    </div>
+
+    {{#if user }} 
     
       <div class="star">
         <form id="star">
@@ -95,6 +96,7 @@
         </div>
         <a class="back" href="/private">Back to Home Page</a>
       </div>
+      {{/if}}
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
