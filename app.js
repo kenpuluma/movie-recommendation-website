@@ -6,7 +6,7 @@ const strategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 const bcrypt = require("bcrypt");
-const moviesAPI =require('./db/movies.js');
+const moviesAPI = require('./db/movies.js');
 const usersAPI = require("./db/users.js");
 const app = express();
 
@@ -34,7 +34,7 @@ passport.serializeUser(function (user, done) {
     done(null, user._id);
 });
 
-passport.deserializeUser(async function (_id, done) {
+passport.deserializeUser(async (_id, done) => {
     const user = await usersAPI.getUserById(_id);
     try {
         done(null, user);
@@ -64,10 +64,6 @@ app.get('/', (req, res) => {
 app.get('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
     res.redirect('/private');
 });
-
-// app.get('/signup',(req,res)=>{
-//     res.render('body/signup',{});  
-// });
 
 app.get("/logout", (req, res) => {
     req.logout();
@@ -161,7 +157,7 @@ app.get('/get_movies_by_genre', async (req, res) => {
     }
 });
 
-app.post('/favorite', async (req, res) => {
+app.post('/add_to_fav', async (req, res) => {
     var user_id = req.body.user_id;
     var item_id = req.body.favorite;
     
@@ -173,7 +169,7 @@ app.post('/favorite', async (req, res) => {
     }
 });
 
-app.delete('/favorite', async (req, res) => {
+app.delete('/add_to_fav', async (req, res) => {
     var user_id = req.body.user_id;
     var item_id = req.body.favorite;
     
@@ -216,13 +212,12 @@ app.get('/favorites', async (req, res) => {
     	var moviesArray = [];
     	for(var i = 0; i <= req.user.favorites.length; ++i)
     	{
-    		if (req.user.favorites[i] != undefined)
+    		if (req.user.favorites[i] !== undefined)
     		{
     			var movie = await moviesAPI.getMovieById(req.user.favorites[i]);
     			moviesArray[i] = movie.title;
     		}
     	}
-
     	req.user.favorites = moviesArray;
 
         res.render('body/favorites', {user: req.user});
@@ -288,11 +283,6 @@ app.post('/score_submit', (req, res) => {
     });
 });
 
-app.post('/add_to_fav', (req, res) => {
-    usersAPI.addFavorite(req.user._id, req.body.movie_id).then((film) => {
-        res.render('body/comment', {film: film, user: req.user});
-    });
-});
 
 // app.use(async (req, res, next) => {
 //     var err = new Error('File Not Found');
