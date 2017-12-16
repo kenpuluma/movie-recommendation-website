@@ -108,6 +108,26 @@ app.get('/about', (req, res) => {
     res.render('about', {});
 });
 
+app.get('/search_movies_by_genre', async (req, res) => {
+    try {
+        var moviesList = await moviesAPI.getMovieByTitleFussyForCertainGenre(req.query.genre, req.query.key_word);
+        console.log(req.query);
+        if (req.query.user_id != undefined)
+        {
+        	const user = await usersAPI.getUserById(req.query.user_id);
+        	moviesList = await moviesAPI.formatFavElement(moviesList, user);
+        }
+
+        var moviesJson = JSON.stringify(moviesList);
+        console.log(moviesJson);
+        res.send(moviesJson);
+    } catch(e) {
+    	console.log(e);
+        res.send({"result":"failed"});
+    }
+});
+
+
 app.get('/show_movies_by_genre', async (req, res) => {
     try {
         const movie = await moviesAPI.getMovieById(req.query.id);
@@ -126,35 +146,26 @@ app.get('/show_movies_by_genre', async (req, res) => {
 
 app.get('/get_movies_by_genre', async (req, res) => {
     try {
-        const moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
-        if (moviesList) {
-        	var favoritesHis = {};
+        var moviesList = null;
 
-	        if (req.query.user_id != undefined)
+        if (req.query.genre == 'all-type')
+        	moviesList = await moviesAPI.getAllMovies();
+        else
+        	moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
+        //console.log(moviesList);
+        if (moviesList) {
+        	if (req.query.user_id != undefined)
 	        {
 	        	const user = await usersAPI.getUserById(req.query.user_id);
-	        	for(var i = 0; i <= user.favorites.length; ++i)
-	        	{
-	        		var _id = user.favorites[i];
-	        		favoritesHis[_id] = true;
-	        	}
-	        }
-	        for(var i=0; i <= moviesList.length; ++i)
-	        {
-	        	if (moviesList[i] != undefined)
-	        	{
-		        	var movieID = moviesList[i]._id; 
-		        	if (movieID in favoritesHis)
-		        	{
-		        		moviesList[i].favorite = 'true';
-		        	}
-	        	}
+	        	moviesList = await moviesAPI.formatFavElement(moviesList, user);
 	        }
 
             var moviesJson = JSON.stringify(moviesList);
+
             res.send(moviesJson);
         }
     } catch(e) {
+    	console.log(e);
         res.send({"result":"failed"});
     }
 });
