@@ -25,6 +25,14 @@
       <a href="/">Home</a>
       <a href="/about">About</a>
     </nav>
+
+    <div id="search-field">
+      <form id="search-form">
+          <input id="key_word" autocomplete="off" placeholder="please enter key word" style="border:none;width:auto;height:auto;" type="text" />
+          <button id="search-btn" style="border:none;width:auto;" type="submit">search</button>
+      </form>
+    </div>
+
     <button onclick="document.getElementById('login-modal').style.display='block'" style="width:auto;" id="loginform">Login</button>
     <div id="login-modal" class="modal">
       
@@ -103,28 +111,31 @@
           <i class="fa fa-film fa-2x"></i>
         </div>
         <nav class="main-nav">
-          <a href="#" id="comedy-btn" class="main-nav-btn active">
+          <a href="#" id="all-type-btn" tag="all-type" class="main-nav-btn active">
+            <i class="fa fa-imdb"></i> All-Type
+          </a>
+          <a href="#" id="comedy-btn" tag="comedy" class="main-nav-btn active">
             <i class="fa fa-imdb"></i> Comedy
           </a>
-          <a href="#" id="disaster-btn" class="main-nav-btn">
+          <a href="#" id="disaster-btn" tag="disaster" class="main-nav-btn">
             <i class="fa fa-imdb"></i> Disaster
           </a>
-          <a href="#" id="crime-btn" class="main-nav-btn">
+          <a href="#" id="crime-btn" tag="crime" class="main-nav-btn">
             <i class="fa fa-imdb"></i> Crime
           </a>
-          <a href="#" id="war-btn" class="main-nav-btn">
+          <a href="#" id="war-btn" tag="war" class="main-nav-btn">
             <i class="fa fa-imdb"></i> War
           </a>
-          <a href="#" id="horror-btn" class="main-nav-btn">
+          <a href="#" id="horror-btn" tag="horror" class="main-nav-btn">
             <i class="fa fa-imdb"></i> Horror
           </a>
-          <a href="#" id="science-fiction-btn" class="main-nav-btn">
+          <a href="#" id="science-fiction-btn" tag="science-fiction" class="main-nav-btn">
             <i class="fa fa-imdb"></i> Science Fiction
           </a>
-          <a href="#" id="romantic-btn" class="main-nav-btn">
+          <a href="#" id="romantic-btn" tag="romantics" class="main-nav-btn">
             <i class="fa fa-imdb"></i> Romantics
           </a>
-          <a href="#" id="action-btn" class="main-nav-btn">
+          <a href="#" id="action-btn" tag="action" class="main-nav-btn">
             <i class="fa fa-imdb"></i> Action
           </a>
         </nav>
