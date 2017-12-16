@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+   
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,8 +19,10 @@
     <link rel="stylesheet" href="css/profile.css">
     <link rel="stylesheet" href="css/movieDetail.css">
   </head>
+  
 
   <body>
+    {{#if user }}
     <header class="top-header">
         <nav class="top-nav">
             <a href="/private">Home</a>
@@ -31,6 +34,7 @@
     
         <i id="avatar" class="avatar fa fa-user fa-2x"></i>
     </header>
+    {{/if}}
 
     <div class="img">
     <img src="{{galleries.[0]}}"></img>
