@@ -367,43 +367,6 @@
         });
     }
 
-   
-
-    /**
-     * API #4 Toggle favorite (or visited) items
-     * 
-     * @param item_id -
-     *            The item business id
-     * 
-     * API end point: [POST]/[DELETE] /Dashi/history request json data: {
-     * user_id: 1111, visited: [a_list_of_business_ids] }
-     */
-    function changeFavoriteItem(item_id) {
-        // Check whether this item has been visited or not
-        var li = $('item-' + item_id);
-        var favIcon = $('fav-icon-' + item_id);
-        var favorite = li.dataset.favorite !== 'true';
-
-        // The request parameters
-        var url = './favorite';
-        var req = JSON.stringify({
-            user_id: user_id,
-            favorite: item_id
-        });
-        var method = favorite ? 'POST' : 'DELETE';
-
-        ajax(method, url, req,
-            // successful callback
-            function(res) {
-                var result = JSON.parse(res);
-
-                if (result.result === 'SUCCESS') {
-                    li.dataset.favorite = favorite;
-                    favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
-                }
-            });
-    }
-
     function onShowMovies(movie_id)
     {
         // The request parameters
