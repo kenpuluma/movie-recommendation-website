@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-   
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/profile.css">
     <link rel="stylesheet" href="css/movieDetail.css">
-  </head>
-  
+</head>
 
-  <body>
-    {{#if user }}
+
+<body>
+{{#if user }}
     <header class="top-header">
         <nav class="top-nav">
             <a href="/private">Home</a>
@@ -30,74 +30,69 @@
             <a href="/favorites">Favorites</a>
             <a href="/about">About</a>
         </nav>
-    
+
         <i id="avatar" class="avatar fa fa-user fa-2x"></i>
     </header>
-    {{/if}}
+{{/if}}
 
-    <div class="img">
+<div class="img">
     <img src="{{movie.galleries.[0]}}"></img>
-    </div>
-    <div class="info">
-      <h1>{{movie.title}}</h1>
-        <span class="content">Genre:</span>
-        <span id="movie_genre" class="content">{{movie.genres}}</span>
-        <br /><span class="content">Rating:</span>
-        <span id="movie_rating" class="content">{{movie.rating}}</span>  
-        <br /><span class="content">Released date:</span>
-        <span id="movie_year" class="content">{{movie.released_date}}</span>
-        <br /><span class="content">Director:</span>
-        <span id="movie_director" class="content">{{movie.director}}</span>
-        <br /><span class="content">Main actors:</span>
-        <span id="movie_actor" class="content">{{movie.actors}}</span>
-        <br /><span class="content">Comments:</span>
-        <span id="movie_comments" class="content">{{movie.comments}}</span>
-    </div>
-    
+</div>
+<div class="info">
+    <h1>{{movie.title}}</h1>
+    <span class="content">Genre:</span>
+    <span id="movie_genre" class="content">{{movie.genres}}</span>
+    <br/><span class="content">Rating:</span>
+    <span id="movie_rating" class="content">{{movie.rating}}</span>
+    <br/><span class="content">Released date:</span>
+    <span id="movie_year" class="content">{{movie.released_date}}</span>
+    <br/><span class="content">Director:</span>
+    <span id="movie_director" class="content">{{movie.director}}</span>
+    <br/><span class="content">Main actors:</span>
+    <span id="movie_actor" class="content">{{movie.actors}}</span>
+    <br/><span class="content">Comments:</span>
+    <span id="movie_comments" class="content">{{movie.comments}}</span>
+</div>
 
-    {{#if user }} 
-    
-      <div class="star">
-        <form id="star">
-          <h2>Rate here:</h2>
-          <ul>
-            <li><a href="javascript:;">1</a></li>
-            <li><a href="javascript:;">2</a></li>
-            <li><a href="javascript:;">3</a></li>
-            <li><a href="javascript:;">4</a></li>
-            <li><a href="javascript:;">5</a></li>
-          </ul>
-          <button class="button blue" type="submit" >Give a score to this film</button>
-        </form>     
-      </div>
 
-      
+{{#if user }}
 
-      <div class="comments">
+    <div class="comments">
         <div class="other_say">
-          <br>
-          <h2 class="title">Comments: </h2>
-          {{#movie.comments}}
-          <p class="username">{{username}} : </p> 
-          <p class="content">{{comment}}</p>
-          <p class="time">{{time}}</p>
-          {{/movie.comments}}
+            <br>
+            <h2 class="title">Comments: </h2>
+            {{#movie.comments}}
+                <p class="username">{{username}} : </p>
+                <p class="content">{{comment}}</p>
+                <p class="time">{{time}}</p>
+            {{/movie.comments}}
+        </div>
+        <div class="star" id="star">
+            <h2>Rate here:</h2>
+            <ul id="star_list">
+                <li><a href="javascript:">1</a></li>
+                <li><a href="javascript:">2</a></li>
+                <li><a href="javascript:">3</a></li>
+                <li><a href="javascript:">4</a></li>
+                <li><a href="javascript:">5</a></li>
+            </ul>
         </div>
         <div class="comment_button">
-          <form action="/comment_submit" method="post">
-          <textarea class="word" name="content"></textarea>
-          <input type="hidden" name="movie_id" value="{{movie._id}}"></input>
-          <br>
-          <br>
-          <button class="button blue" type="submit" >Add Comment</button>
-          </form>
+            <form action="/comment_submit" method="post">
+                <textarea class="word" name="content"></textarea>
+                <input type="hidden" name="movie_id" value="{{movie._id}}">
+                <input type="hidden" name="movie_score" id="score" value=0>
+                <br>
+                <br>
+                <button class="button blue" type="submit">Add Comment</button>
+            </form>
         </div>
         <a class="back" href="/private">Back to Home Page</a>
-      </div>
-      {{/if}}
-  </body>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  {{!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --}}
-  <script src="js/submit.js"></script>
-  <script src="js/comment.js"></script>
+    </div>
+{{/if}}
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+{{!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --}}
+<script src="js/comment.js"></script>
 </html>

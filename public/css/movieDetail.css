@@ -53,12 +53,6 @@ img{
     width:1000px;
 }
 
-.star{
-    position:absolute;
-    top:60%;
-    left:12%;
-}
-
 #star ul {
   padding-left: 0;
   overflow: hidden;

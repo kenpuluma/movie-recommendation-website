@@ -63,36 +63,21 @@ app.get('/', (req, res) => {
     res.render('body/homepage', {});
 });
 
-app.get('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
-    res.redirect('/private');
-});
-
 app.get("/logout", (req, res) => {
     req.logout();
     // log out and redirect to the root page/directory
     res.redirect("/");
 });
 
-// app.post('/signup', (req,res) => {
-//     if (req.body.password1 != req.body.password2) res.redirect('/signup_err');
-//     else {
-//         users.getUserByUsername(req.body.username).then((user) => {
-//             if (user) res.redirect('/signup_err');
-//             else {
-//                 users.createUser(req.body.username,req.body.password1,req.body.email,req.body.phone_num);
-//                 res.redirect('/private');
-//             }
-//         });
-//     }
-// });
-
 app.post('/signup', async (req, res) => {
-    if (req.body.password1 != req.body.password2) {
+    if (req.body.password1 !== req.body.password2) {
         res.redirect('/signup_err');
     } else {
         console.log(req.body);
         try {
-            await usersAPI.addUser(req.body.username, req.body.password1, req.body.email, req.body.phone_num);
+            const saltRounds = 4;
+            let hashed_password = await bcrypt.hash(req.body.password1, saltRounds);
+            await usersAPI.addUser(req.body.username, hashed_password, req.body.email, req.body.phone_num);
             console.log("Create user success!");
             res.render('body/private');
         } catch (e) {
@@ -110,25 +95,18 @@ app.get('/about', (req, res) => {
 
 app.get('/search_movies_by_genre', async (req, res) => {
     try {
-        var moviesList = await moviesAPI.getMovieByTitleFussyForCertainGenre(req.query.genre, req.query.key_word);
-        console.log(req.query);
-        if (req.query.user_id != undefined)
-        {
-        	const user = await usersAPI.getUserById(req.query.user_id);
-        	moviesList = await moviesAPI.formatFavElement(moviesList, user);
-        }
-
-        var moviesJson = JSON.stringify(moviesList);
+        const moviesList = await moviesAPI.getMovieByTitleFussyForCertainGenre(req.query.genre, req.query.key_word);
+        let moviesJson = JSON.stringify(moviesList);
         console.log(moviesJson);
         res.send(moviesJson);
-    } catch(e) {
-    	console.log(e);
-        res.send({"result":"failed"});
+    } catch (e) {
+        console.log(e);
+        res.send({result: "Failed"});
     }
 });
 
 
-app.get('/show_movies_by_genre', async (req, res) => {
+app.get('/show_movies_details', async (req, res) => {
     try {
         const movie = await moviesAPI.getMovieById(req.query.id);
         if (movie) {
@@ -136,11 +114,11 @@ app.get('/show_movies_by_genre', async (req, res) => {
 
             movie.avg_score = movie.avg_score * 12.4 + 'px';
 
-            res.render('body/movie_description', {user:req.user, movie:movie});
+            res.render('body/movie_description', {user: req.user, movie: movie});
 
         }
     } catch (e) {
-        res.send({"result":"failed"});
+        res.send({"result": "failed"});
     }
 });
 
@@ -148,52 +126,43 @@ app.get('/get_movies_by_genre', async (req, res) => {
     try {
         var moviesList = null;
 
-        if (req.query.genre == 'all-type')
-        	moviesList = await moviesAPI.getAllMovies();
+        if (req.query.genre === 'all-type')
+            moviesList = await moviesAPI.getAllMovies();
         else
-        	moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
-        //console.log(moviesList);
+            moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
+        console.log(moviesList);
+
         if (moviesList) {
-        	if (req.query.user_id != undefined)
-	        {
-	        	const user = await usersAPI.getUserById(req.query.user_id);
-	        	moviesList = await moviesAPI.formatFavElement(moviesList, user);
-            }
-            for (let i = 0; i < moviesList.length; ++i) {
-                moviesList[i].avg_score = i % 5 + 1; 
-            }
-
-            var moviesJson = JSON.stringify(moviesList);
-
+            const moviesJson = JSON.stringify(moviesList);
             res.send(moviesJson);
         }
-    } catch(e) {
-    	console.log(e);
-        res.send({"result":"failed"});
+    } catch (e) {
+        console.log(e);
+        res.send({"result": "failed"});
     }
 });
 
 app.post('/add_to_fav', async (req, res) => {
-    var user_id = req.body.user_id;
-    var item_id = req.body.favorite;
-    
+    const user_id = req.body.user_id;
+    const item_id = req.body.favorite;
+
     try {
         await usersAPI.addFavorite(user_id, item_id);
-        res.send({"result":"SUCCESS"});
-    } catch(e) {
-        res.send({"result":"failed"});
+        res.send({"result": "SUCCESS"});
+    } catch (e) {
+        res.send({"result": "failed"});
     }
 });
 
 app.delete('/add_to_fav', async (req, res) => {
-    var user_id = req.body.user_id;
-    var item_id = req.body.favorite;
-    
+    const user_id = req.body.user_id;
+    const item_id = req.body.favorite;
+
     try {
         await usersAPI.removeFavorite(user_id, item_id);
-        res.send({"result":"SUCCESS"});
-    } catch(e) {
-        res.send({"result":"failed"});
+        res.send({"result": "SUCCESS"});
+    } catch (e) {
+        res.send({"result": "failed"});
     }
 });
 
@@ -201,12 +170,15 @@ app.get('/signup_err', (req, res) => {
     res.render('body/signup_err', {});
 });
 
-app.post('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
-    res.redirect('/private');
-});
+app.post('/login', passport.authenticate('local', {
+        successRedirect: '/private',
+        failureRedirect: '/',
+        failureFlash: true
+    })
+);
 
 app.get('/private', (req, res) => {
-    if (req.user) res.render('body/private', {user: req.user});
+    if (req.isAuthenticated()) res.render('body/private', {user: req.user});
     else res.redirect('/');
 });
 
@@ -221,99 +193,42 @@ app.get('/account_info', (req, res) => {
     } else {
         res.redirect("/");
     }
-})
+});
 
 app.get('/favorites', async (req, res) => {
     if (req.user) {
-    	var moviesArray = [];
-    	for(var i = 0; i <= req.user.favorites.length; ++i)
-    	{
-    		if (req.user.favorites[i] !== undefined)
-    		{
-    			var movie = await moviesAPI.getMovieById(req.user.favorites[i]);
-    			moviesArray[i] = movie.title;
-    		}
-    	}
-    	req.user.favorites = moviesArray;
+        let moviesArray = [];
+        for (let favorite of req.user.favorites) {
+            let movie = await moviesAPI.getMovieById(favorite);
+            moviesArray.push(movie);
+        }
+        req.user.favoriteObjects = moviesArray;
 
         res.render('body/favorites', {user: req.user});
     } else {
         res.redirect("/");
     }
-})
-const score = 4;
-app.post('/result', (req, res) => {
-    if (req.body.filter == "title") {
-        moviesAPI.GetFilmByName(req.body.keyword).then((film) => {
-            if (film.length != 0) res.render('body/result', {film: film});
-            else res.render('body/search_no_found', {});
-        });
-    }
-    else if (req.body.filter == "director") {
-        moviesAPI.GetFilmByDirector(req.body.keyword).then((film) => {
-            if (film.length != 0) res.render('body/result', {film: film});
-            else res.render('body/search_no_found', {});
-        });
-    }
-    else if (req.body.filter == "released_date") {
-        moviesAPI.GetFilmByReleaseYear(req.body.keyword).then((film) => {
-            if (film.length != 0) res.render('body/result', {film: film});
-            else res.render('body/search_no_found', {});
-        });
-    }
-    else if (req.body.filter == "avg_score") {
-        moviesAPI.GetFilmByScore(req.body.keyword).then((film) => {
-            if (film.length != 0) res.render('body/result', {film: film});
-            else res.render('body/search_no_found', {});
-        });
-    }
-    else if (req.body.filter == "actors") {
-        moviesAPI.GetFilmByActor(req.body.keyword).then((film) => {
-            if (film.length != 0) res.render('body/result', {film: film});
-            else res.render('body/search_no_found', {});
-        });
-    }
-    else if (req.body.filter == "genre") {
-        moviesAPI.GetFilmByFilmType(req.body.keyword).then((film) => {
-            if (film.length != 0) res.render('body/result', {film: film});
-            else res.render('body/search_no_found', {});
-        });
-    }
 });
 
-// app.post('/comment', (req, res) => {
-//     moviesAPI.GetFilmByNo(req.body.index).then((film) => {
-//         res.render('body/comment', {film: film, user: req.user});
-//     });
-// });
-
-app.post("/score_submit",  (req, res) => {
-    score = parseInt(req.query.score);
-});
 
 app.post('/comment_submit', async (req, res) => {
-    console.log(req.body);
-    const movie = await commentsAPI.addComment(req.user._id, req.body.movie_id, score, req.body.content);
-    res.render('body/movie_description', {movie: movie, user: req.user});
+
+    let score=parseInt(req.body.movie_score);
+
+    try {
+        const comment = await commentsAPI.addComment(req.user._id, req.body.movie_id, score, req.body.content);
+        const movie = await moviesAPI.addComment(req.body.movie_id, comment._id);
+        const user = await usersAPI.addComment(req.user._id, comment._id);
+        res.render('body/movie_description', {movie: movie, user: user});
+    }
+    catch (e){
+        res.redirect("/");
+    }
 });
 
-app.get('/comment_submit', async(req, res) => {
+app.get('/comment_submit', async (req, res) => {
     res.redirect('/private', {});
-})
-
-// app.post('/score_submit', (req, res) => {
-//     console.log(req.body);
-//     moviesAPI.GiveScore(req.body.film_name, req.body.score).then((film) => {
-//         res.json(film);
-//     });
-// });
-
-
-// app.use(async (req, res, next) => {
-//     var err = new Error('File Not Found');
-//     err.status = 404;
-//     await next(err);
-// });
+});
 
 app.listen(3000, () => {
     console.log("We've now got a server!");

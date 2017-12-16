@@ -98,6 +98,10 @@ describe("db", function () {
                 const movieList = await movieData.getAllMovies();
                 movieList.should.have.length(2);
             });
+            it('get movie by genre and name', async function () {
+                const movieList = await movieData.getMovieByTitleFussyForCertainGenre("Action", "Test");
+                movieList.should.have.length(1);
+            });
         });
         describe("add attributes", function () {
             it('add actor', async function () {
@@ -214,7 +218,7 @@ describe("db", function () {
                 const commentList = await commentData.getCommentByMovieId(movie1._id);
                 commentList.should.have.length(2);
             });
-            it('get movie by user and movie id', async function () {
+            it('get comment by user and movie id', async function () {
                 const user1 = await userData.getUserByUsername("testuser1");
                 const movie1 = await movieData.getMovieByTitle("testmovie1");
                 const comment1 = await commentData.getCommentByUserAndMovieId(user1._id, movie1._id);

@@ -1,15 +1,10 @@
 const uuidv4 = require("uuid/v4");
 const mongoCollections = require("./mongoCollections");
 const users = mongoCollections.users;
-const bcrypt=require("bcrypt");
 
-module.exports.addUser = async (user_name, password, email, phone) => {
-    if (typeof user_name !== "string" || typeof password !== "string")
+module.exports.addUser = async (user_name, hashed_password, email, phone) => {
+    if (typeof user_name !== "string" || typeof hashed_password !== "string")
         throw "Username or password is not recognized";
-
-    const saltRounds = 4;
-    let hashed_password = await bcrypt.hash(password, saltRounds);
-
 
     let newUser = {
         _id: uuidv4(),
@@ -86,7 +81,8 @@ module.exports.addFavorite = async (user_id, movie_id) => {
     let updatedUserData = {
         favorites: oldUser.favorites
     };
-    updatedUserData.favorites.push(movie_id);
+    if (!updatedUserData.favorites.includes(movie_id))
+        updatedUserData.favorites.push(movie_id);
 
     let updateCommand = {
         $set: updatedUserData

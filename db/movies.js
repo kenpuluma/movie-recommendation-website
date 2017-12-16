@@ -191,8 +191,8 @@ module.exports.removeComment = async (id, comment) => {
     return await this.getMovieById(id);
 };
 
-module.exports.updateScore = (movie_id, score) =>{
-    
+module.exports.updateScore = (movie_id, score) => {
+
 };
 
 module.exports.updateMovie = async (id, updatedMovie) => {
@@ -275,7 +275,7 @@ module.exports.getMovieByTitle = async (title) => {
 
 module.exports.getMovieByTitleFussy = async (title) => {
     const movieCollection = await movies();
-    const movieList = await movieCollection.find({title: new RegExp(title)}).toArray();
+    const movieList = await movieCollection.find({title: new RegExp(title, ("i"))}).toArray();
     if (!movieList)
         throw "Movie not found";
     return movieList;
@@ -342,55 +342,16 @@ async function updateAvgScore(updatedMovieData) {
 }
 
 module.exports.getMovieByTitleFussyForCertainGenre = async (genre, title) => {
-    var moviesForCertainGenre = null;
-    title = title.toLowerCase();
-
-    if (genre == 'all-type') {
-        moviesForCertainGenre = await this.getAllMovies();
+    if (genre === 'all-type') {
+        return await this.getMovieByTitleFussy(title);
+    } else {
+        const movieCollection = await movies();
+        const movieList = await movieCollection.find({
+            title: new RegExp(title, "i"),
+            genres: genre
+        }).toArray();
+        if (!movieList)
+            throw "Movie not found";
+        return movieList;
     }
-    else {
-        moviesForCertainGenre = await this.getMovieByGenre(genre); 
-    }
-
-    if (!moviesForCertainGenre)
-        throw "Movie not found";
-
-    //regular expression
-    var len = moviesForCertainGenre.length;
-    var arr = [];
-    var reg = new RegExp(title.toLowerCase());
-    for(var i = 0; i < len; i++){
-        // return -1 if didn't match
-        if(moviesForCertainGenre[i].title.toLowerCase().match(reg)){
-            arr.push(moviesForCertainGenre[i]);
-        }
-    }
-    return arr;
-};
-
-module.exports.formatFavElement = async (moviesList, user) => {
-    var favoritesHis = {};
-
-    if (user != undefined)
-    {
-        for(var i = 0; i <= user.favorites.length; ++i)
-        {
-            var _id = user.favorites[i];
-            favoritesHis[_id] = true;
-        }
-    }
-
-    for(var i=0; i <= moviesList.length; ++i)
-    {
-        if (moviesList[i] != undefined)
-        {
-            var movieID = moviesList[i]._id; 
-            if (movieID in favoritesHis)
-            {
-                moviesList[i].favorite = 'true';
-            }
-        }
-    }
-
-    return moviesList;
 };

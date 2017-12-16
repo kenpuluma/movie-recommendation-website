@@ -439,7 +439,7 @@
     function onShowMovies(movie_id)
     {
         // The request parameters
-        var url = 'show_movies_by_genre';
+        var url = 'show_movies_details';
         var params = 'id=' + movie_id;
         var req = JSON.stringify({});
         location.href = url + '?' + params;
