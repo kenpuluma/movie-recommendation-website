@@ -210,8 +210,20 @@ app.get('/account_info', (req, res) => {
     }
 })
 
-app.get('/favorites', (req, res) => {
+app.get('/favorites', async (req, res) => {
     if (req.user) {
+    	var moviesArray = [];
+    	for(var i = 0; i <= req.user.favorites.length; ++i)
+    	{
+    		if (req.user.favorites[i] != undefined)
+    		{
+    			var movie = await moviesAPI.getMovieById(req.user.favorites[i]);
+    			moviesArray[i] = movie.title;
+    		}
+    	}
+
+    	req.user.favorites = moviesArray;
+
         res.render('body/favorites', {user: req.user});
     } else {
         res.redirect("/");
