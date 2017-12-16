@@ -158,7 +158,10 @@ app.get('/get_movies_by_genre', async (req, res) => {
 	        {
 	        	const user = await usersAPI.getUserById(req.query.user_id);
 	        	moviesList = await moviesAPI.formatFavElement(moviesList, user);
-	        }
+            }
+            for (let i = 0; i < moviesList.length; ++i) {
+                moviesList[i].avg_score = i % 5 + 1; 
+            }
 
             var moviesJson = JSON.stringify(moviesList);
 
@@ -291,7 +294,6 @@ app.post("/score_submit",  (req, res) => {
 app.post('/comment_submit', async (req, res) => {
     console.log(req.body);
     const movie = await commentsAPI.addComment(req.user._id, req.body.movie_id, score, req.body.content);
-    console.log(movie);
     res.render('body/movie_description', {movie: movie, user: req.user});
 });
 
