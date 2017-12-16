@@ -343,35 +343,29 @@ async function updateAvgScore(updatedMovieData) {
 
 module.exports.getMovieByTitleFussyForCertainGenre = async (genre, title) => {
     var moviesForCertainGenre = null;
-    if (genre == 'all-type')
-    {
-        moviesForCertainGenre = await movies();
+    title = title.toLowerCase();
 
-        const movieList = moviesForCertainGenre.find({title: new RegExp(title)}).toArray();
-        if (!movieList)
-            throw "Movie not found";
-
-        return movieList;
+    if (genre == 'all-type') {
+        moviesForCertainGenre = await this.getAllMovies();
     }
-    else
-    {
-        moviesForCertainGenre = await this.getMovieByGenre(genre);
-        if (!moviesForCertainGenre)
-            throw "Movie not found";
+    else {
+        moviesForCertainGenre = await this.getMovieByGenre(genre); 
+    }
 
-        //正则表达式
-        var len = moviesForCertainGenre.length;
-        var arr = [];
-        var reg = new RegExp(title);
-        for(var i=0;i<len;i++){
-            //如果字符串中不包含目标字符会返回-1
-            if(moviesForCertainGenre[i].title.match(reg)){
-                arr.push(moviesForCertainGenre[i]);
-            }
+    if (!moviesForCertainGenre)
+        throw "Movie not found";
+
+    //regular expression
+    var len = moviesForCertainGenre.length;
+    var arr = [];
+    var reg = new RegExp(title.toLowerCase());
+    for(var i = 0; i < len; i++){
+        // return -1 if didn't match
+        if(moviesForCertainGenre[i].title.toLowerCase().match(reg)){
+            arr.push(moviesForCertainGenre[i]);
         }
-        
-        return arr;
     }
+    return arr;
 };
 
 module.exports.formatFavElement = async (moviesList, user) => {
