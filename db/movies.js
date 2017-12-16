@@ -191,6 +191,10 @@ module.exports.removeComment = async (id, comment) => {
     return await this.getMovieById(id);
 };
 
+module.exports.updateScore = (movie_id, score) =>{
+    
+};
+
 module.exports.updateMovie = async (id, updatedMovie) => {
     const movieCollection = await movies();
 
@@ -336,3 +340,63 @@ async function updateAvgScore(updatedMovieData) {
     }
     updatedMovieData.avg_score = total_score / updatedMovieData.comments.length;
 }
+
+module.exports.getMovieByTitleFussyForCertainGenre = async (genre, title) => {
+    var moviesForCertainGenre = null;
+    if (genre == 'all-type')
+    {
+        moviesForCertainGenre = await movies();
+
+        const movieList = moviesForCertainGenre.find({title: new RegExp(title)}).toArray();
+        if (!movieList)
+            throw "Movie not found";
+
+        return movieList;
+    }
+    else
+    {
+        moviesForCertainGenre = await this.getMovieByGenre(genre);
+        if (!moviesForCertainGenre)
+            throw "Movie not found";
+
+        //正则表达式
+        var len = moviesForCertainGenre.length;
+        var arr = [];
+        var reg = new RegExp(title);
+        for(var i=0;i<len;i++){
+            //如果字符串中不包含目标字符会返回-1
+            if(moviesForCertainGenre[i].title.match(reg)){
+                arr.push(moviesForCertainGenre[i]);
+            }
+        }
+        
+        return arr;
+    }
+};
+
+module.exports.formatFavElement = async (moviesList, user) => {
+    var favoritesHis = {};
+
+    if (user != undefined)
+    {
+        for(var i = 0; i <= user.favorites.length; ++i)
+        {
+            var _id = user.favorites[i];
+            favoritesHis[_id] = true;
+        }
+    }
+
+    for(var i=0; i <= moviesList.length; ++i)
+    {
+        if (moviesList[i] != undefined)
+        {
+            var movieID = moviesList[i]._id; 
+            if (movieID in favoritesHis)
+            {
+                moviesList[i].favorite = 'true';
+            }
+        }
+    }
+
+    return moviesList;
+};
