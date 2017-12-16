@@ -59,6 +59,7 @@
       <div class="star">
         <form id="star">
         <input type="hidden" name="movie_name" value="{{title}}"></input>
+        <h2>Rate here:</h2>
         <ul>
           <li><a href="javascript:;">1</a></li>
           <li><a href="javascript:;">2</a></li>
@@ -66,7 +67,7 @@
           <li><a href="javascript:;">4</a></li>
           <li><a href="javascript:;">5</a></li>
         </ul>
-        <button class="button blue" type="submit" >Give a score to this film</button>
+        
         </form>
       </div>
 
@@ -80,6 +81,7 @@
 
       <div class="comments">
         <div class="other_say">
+          <br>
           <h2 class="title">Comments: </h2>
           {{#movies.comments}}
           <p class="username">{{username}} : </p> 
