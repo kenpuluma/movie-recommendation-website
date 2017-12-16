@@ -11,6 +11,7 @@ const usersAPI = require("./db/users.js");
 const commentsAPI = require('./db/comments.js');
 const app = express();
 
+
 passport.use(new strategy(
     async (username, password, done) => {
         try {
@@ -226,7 +227,7 @@ app.get('/favorites', async (req, res) => {
         res.redirect("/");
     }
 })
-
+const score = 4;
 app.post('/result', (req, res) => {
     if (req.body.filter == "title") {
         moviesAPI.GetFilmByName(req.body.keyword).then((film) => {
@@ -266,28 +267,29 @@ app.post('/result', (req, res) => {
     }
 });
 
-app.post('/comment', (req, res) => {
-    moviesAPI.GetFilmByNo(req.body.index).then((film) => {
-        res.render('body/comment', {film: film, user: req.user});
-    });
-});
+// app.post('/comment', (req, res) => {
+//     moviesAPI.GetFilmByNo(req.body.index).then((film) => {
+//         res.render('body/comment', {film: film, user: req.user});
+//     });
+// });
 
-app.post("/rate_submit", async (req, res) => {
-    console.log(req);
+app.post("/score_submit",  (req, res) => {
+    score = parseInt(req.query.score);
 });
 
 app.post('/comment_submit', async (req, res) => {
     console.log(req.body);
-    const movie = await commentsAPI.addComment(req.user._id, req.body.movie_id, req.body.user_score, req.body.content);
+    const movie = await commentsAPI.addComment(req.user._id, req.body.movie_id, score, req.body.content);
     console.log(movie);
     res.render('body/movie_description', {movie: movie, user: req.user});
 });
 
 app.get('/comment_submit', async(req, res) => {
-    res.render('body/private', {});
+    res.redirect('/private', {});
 })
 
 // app.post('/score_submit', (req, res) => {
+//     console.log(req.body);
 //     moviesAPI.GiveScore(req.body.film_name, req.body.score).then((film) => {
 //         res.json(film);
 //     });
