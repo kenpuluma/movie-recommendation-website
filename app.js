@@ -8,6 +8,7 @@ const flash = require('connect-flash');
 const bcrypt = require("bcrypt");
 const moviesAPI = require('./db/movies.js');
 const usersAPI = require("./db/users.js");
+const commentsAPI = require('./db/comments.js');
 const app = express();
 
 passport.use(new strategy(
@@ -271,17 +272,26 @@ app.post('/comment', (req, res) => {
     });
 });
 
-app.post('/comment_submit', (req, res) => {
-    moviesAPI.AddComment(req.body.film_name, req.user.username, req.body.content).then((film) => {
-        res.render('body/comment', {film: film, user: req.user});
-    });
+app.post("/rate_submit", async (req, res) => {
+    console.log(req);
 });
 
-app.post('/score_submit', (req, res) => {
-    moviesAPI.GiveScore(req.body.film_name, req.body.score).then((film) => {
-        res.json(film);
-    });
+app.post('/comment_submit', async (req, res) => {
+    console.log(req.body);
+    const movie = await commentsAPI.addComment(req.user._id, req.body.movie_id, req.body.user_score, req.body.content);
+    console.log(movie);
+    res.render('body/movie_description', {movie: movie, user: req.user});
 });
+
+app.get('/comment_submit', async(req, res) => {
+    res.render('body/private', {});
+})
+
+// app.post('/score_submit', (req, res) => {
+//     moviesAPI.GiveScore(req.body.film_name, req.body.score).then((film) => {
+//         res.json(film);
+//     });
+// });
 
 
 // app.use(async (req, res, next) => {
