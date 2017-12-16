@@ -18,9 +18,10 @@
           score:score
       };
   
+      console.log("test");
       $.ajax({
         type: "POST",
-        url: "/score_submit",
+        url: "/score_submit?score=4",
         data: JSON.stringify(obj),
         success: function(film) {
           scoreele.html("Score: " + film.score);
