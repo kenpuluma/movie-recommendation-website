@@ -118,7 +118,8 @@ app.get('/show_movies_by_genre', async (req, res) => {
 
             movie.avg_score = movie.avg_score * 12.4 + 'px';
 
-            res.render('body/movie_description', movie);
+            res.render('body/movie_description', {user:req.user, movie:movie}});
+
         }
     } catch (e) {
         res.send({"result":"failed"});
