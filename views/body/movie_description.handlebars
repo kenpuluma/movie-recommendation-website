@@ -39,7 +39,7 @@
     <img src="{{movie.galleries.[0]}}"></img>
     </div>
     <div class="info">
-      <h1>{{title}}</h1>
+      <h1>{{movie.title}}</h1>
         <span class="content">Genre:</span>
         <span id="movie_genre" class="content">{{movie.genres}}</span>
         <br /><span class="content">Rating:</span>
@@ -53,6 +53,7 @@
         <br /><span class="content">Comments:</span>
         <span id="movie_comments" class="content">{{movie.comments}}</span>
     </div>
+    
 
     {{#if user }} 
     
@@ -92,7 +93,7 @@
         <div class="comment_button">
           <form action="/comment_submit" method="post">
           <textarea class="word" name="content"></textarea>
-          <input type="hidden" name="film_name" value="{{title}}"></input>
+          <input type="hidden" name="movie_id" value="{{movie._id}}"></input>
           <br>
           <br>
           <br>
