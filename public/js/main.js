@@ -396,7 +396,7 @@
             // successful callback
             function(res) {
                 var result = JSON.parse(res);
-                console.log(result);
+
                 if (result.result === 'SUCCESS') {
                     li.dataset.favorite = favorite;
                     favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
@@ -499,7 +499,7 @@
             className: 'stars'
         });
 
-        console.log('item.avg_score:' + item.avg_score);
+
         for (var i = 0; i < item.avg_score; i++) {
             var star = $('i', {
                 className: 'fa fa-star'
@@ -524,22 +524,6 @@
 
         date.innerHTML = item.released_date;
         li.appendChild(date);
-
-        // favorite link
-        var favLink = $('p', {
-            className: 'fav-link'
-        });
-
-        favLink.onclick = function() {
-            changeFavoriteItem(item_id);
-        };
-
-        favLink.appendChild($('i', {
-            id: 'fav-icon-' + item_id,
-            className: item.favorite ? 'fa fa-heart' : 'fa fa-heart-o'
-        }));
-
-        li.appendChild(favLink);
 
         itemList.appendChild(li);
     }
