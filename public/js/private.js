@@ -368,7 +368,7 @@
     
             // The request parameters
             var user_id = $('user_id').innerHTML;
-            var url = './favorite';
+            var url = './add_to_fav';
             var req = JSON.stringify({
                 user_id: user_id,
                 favorite: item_id
