@@ -1,14 +1,4 @@
 
-#bg{  
-    width: 60px;  
-    height: 16px;  
-    background: url("http://chuantu.biz/t6/173/1513034923x-1566687345.png");  
-}  
-#over{  
-    height:16px;  
-    background:url("http://chuantu.biz/t6/173/1513034947x-1566687345.png") no-repeat;  
-}
-
 body {
     margin: 0;  
     background-image: url(../img/wood.jpg);    
@@ -65,7 +55,7 @@ img{
 
 .star{
     position:absolute;
-    top:58%;
+    top:60%;
     left:12%;
 }
 
@@ -92,8 +82,8 @@ img{
 
 .add_fav{
     position:absolute;
-    top:103.2%;
-    left:20%;
+    top:75%;
+    left:12%;
 }
 
 
@@ -150,7 +140,7 @@ img{
 .comments{
     width:1000px;
     position:absolute;
-    top:66%;
+    top:90%;
     left:12%;
 }
 
