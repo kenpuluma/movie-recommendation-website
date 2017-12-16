@@ -6,9 +6,9 @@ const strategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 const bcrypt = require("bcrypt");
-const moviesAPI = require('./db/movies.js');
+const moviesAPI =require('./db/movies.js');
 const usersAPI = require("./db/users.js");
-const commentsAPI = require('./db/comments.js');
+const comments = require("./db/comments.js");
 const app = express();
 
 passport.use(new strategy(
@@ -35,7 +35,7 @@ passport.serializeUser(function (user, done) {
     done(null, user._id);
 });
 
-passport.deserializeUser(async (_id, done) => {
+passport.deserializeUser(async function (_id, done) {
     const user = await usersAPI.getUserById(_id);
     try {
         done(null, user);
@@ -65,6 +65,10 @@ app.get('/', (req, res) => {
 app.get('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.', failureFlash: true}), (req, res) => {
     res.redirect('/private');
 });
+
+// app.get('/signup',(req,res)=>{
+//     res.render('body/signup',{});  
+// });
 
 app.get("/logout", (req, res) => {
     req.logout();
@@ -123,42 +127,54 @@ app.get('/show_movies_by_genre', async (req, res) => {
     }
 });
 
-app.get('/get_movies_by_genre', async (req, res) => {
+
+
+app.get('/search_movies_by_genre', async (req, res) => {
     try {
-        const moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
-        if (moviesList) {
-        	var favoritesHis = {};
-
-	        if (req.query.user_id != undefined)
-	        {
-	        	const user = await usersAPI.getUserById(req.query.user_id);
-	        	for(var i = 0; i <= user.favorites.length; ++i)
-	        	{
-	        		var _id = user.favorites[i];
-	        		favoritesHis[_id] = true;
-	        	}
-	        }
-	        for(var i=0; i <= moviesList.length; ++i)
-	        {
-	        	if (moviesList[i] != undefined)
-	        	{
-		        	var movieID = moviesList[i]._id; 
-		        	if (movieID in favoritesHis)
-		        	{
-		        		moviesList[i].favorite = 'true';
-		        	}
-	        	}
-	        }
-
-            var moviesJson = JSON.stringify(moviesList);
-            res.send(moviesJson);
+        var moviesList = await moviesAPI.getMovieByTitleFussyForCertainGenre(req.query.genre, req.query.key_word);
+        console.log(req.query);
+        if (req.query.user_id != undefined)
+        {
+        	const user = await usersAPI.getUserById(req.query.user_id);
+        	moviesList = await moviesAPI.formatFavElement(moviesList, user);
         }
+
+        var moviesJson = JSON.stringify(moviesList);
+        console.log(moviesJson);
+        res.send(moviesJson);
     } catch(e) {
+    	console.log(e);
         res.send({"result":"failed"});
     }
 });
 
-app.post('/add_to_fav', async (req, res) => {
+app.get('/get_movies_by_genre', async (req, res) => {
+    try {
+        var moviesList = null;
+
+        if (req.query.genre == 'all-type')
+        	moviesList = await moviesAPI.getAllMovies();
+        else
+        	moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
+        //console.log(moviesList);
+        if (moviesList) {
+        	if (req.query.user_id != undefined)
+	        {
+	        	const user = await usersAPI.getUserById(req.query.user_id);
+	        	moviesList = await moviesAPI.formatFavElement(moviesList, user);
+	        }
+
+            var moviesJson = JSON.stringify(moviesList);
+
+            res.send(moviesJson);
+        }
+    } catch(e) {
+    	console.log(e);
+        res.send({"result":"failed"});
+    }
+});
+
+app.post('/favorite', async (req, res) => {
     var user_id = req.body.user_id;
     var item_id = req.body.favorite;
     
@@ -170,7 +186,7 @@ app.post('/add_to_fav', async (req, res) => {
     }
 });
 
-app.delete('/add_to_fav', async (req, res) => {
+app.delete('/favorite', async (req, res) => {
     var user_id = req.body.user_id;
     var item_id = req.body.favorite;
     
@@ -213,12 +229,13 @@ app.get('/favorites', async (req, res) => {
     	var moviesArray = [];
     	for(var i = 0; i <= req.user.favorites.length; ++i)
     	{
-    		if (req.user.favorites[i] !== undefined)
+    		if (req.user.favorites[i] != undefined)
     		{
     			var movie = await moviesAPI.getMovieById(req.user.favorites[i]);
     			moviesArray[i] = movie.title;
     		}
     	}
+
     	req.user.favorites = moviesArray;
 
         res.render('body/favorites', {user: req.user});
@@ -272,27 +289,21 @@ app.post('/comment', (req, res) => {
     });
 });
 
-app.post("/rate_submit", async (req, res) => {
-    console.log(req);
+app.post('/comment_submit', (req, res) => {
+    moviesAPI.AddComment(req.body.film_name, req.user.username, req.body.content).then((film) => {
+        res.render('body/comment', {film: film, user: req.user});
+    });
 });
 
-app.post('/comment_submit', async (req, res) => {
-    console.log(req.body);
-    const movie = await commentsAPI.addComment(req.user._id, req.body.movie_id, req.body.user_score, req.body.content);
-    console.log(movie);
-    res.render('body/movie_description', {movie: movie, user: req.user});
+app.post('/score_submit', (req, res) => {
+	console.log(req.query);
 });
 
-app.get('/comment_submit', async(req, res) => {
-    res.render('body/private', {});
-})
-
-// app.post('/score_submit', (req, res) => {
-//     moviesAPI.GiveScore(req.body.film_name, req.body.score).then((film) => {
-//         res.json(film);
-//     });
-// });
-
+app.post('/add_to_fav', (req, res) => {
+    usersAPI.addFavorite(req.user._id, req.body.movie_id).then((film) => {
+        res.render('body/comment', {film: film, user: req.user});
+    });
+});
 
 // app.use(async (req, res, next) => {
 //     var err = new Error('File Not Found');
