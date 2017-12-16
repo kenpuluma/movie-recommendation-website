@@ -8,6 +8,8 @@
             // alert('User clicked on "foo."');
          //  });
         // Register event listeners
+        $('all-type-btn').addEventListener('click', loadAllMovies);
+        $('search-btn').addEventListener('click', onSearchMovies);
         $('comedy-btn').addEventListener('click', loadComedies);
         $('disaster-btn').addEventListener('click', loadDisasters);
         $('crime-btn').addEventListener('click', loadCrimes);
@@ -17,7 +19,8 @@
         $('romantic-btn').addEventListener('click', loadRomantics);
         $('action-btn').addEventListener('click', loadActions);
         // initialization
-        loadComedies();
+        console.log("init main page");
+        loadAllMovies();
 
         // var welcomeMsg = $('welcome-msg');
         // welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
@@ -67,6 +70,21 @@
      * @param btnId -
      *            The id of the navigation button
      */
+    function getCurChosenMovieType()
+    {
+        var btns = document.getElementsByClassName('main-nav-btn');
+
+        // deactivate all navigation buttons
+        for (var i = 0; i < btns.length; i++) {
+            if (btns[i].className.indexOf('active') >= 0)
+            {
+                return btns[i].getAttribute('tag');
+            }
+        }
+
+        return "all-type";
+    } 
+
     function activeBtn(btnId) {
         var btns = document.getElementsByClassName('main-nav-btn');
 
@@ -173,7 +191,58 @@
     // -------------------------------------
     // AJAX call server-side APIs
     // -------------------------------------
-    
+    function onSearchMovies()
+    {
+        // The request parameters
+        var url = './search_movies_by_genre';
+        var keyWord = $('key_word').value;
+        var params = 'genre=' + getCurChosenMovieType() + '&key_word=' + keyWord;
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Searching the movies');
+        console.log("search movies");
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+
+            var items = JSON.parse(res);
+
+            if (!items || items.length === 0) {
+                showWarningMessage('No movies.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load movies.');
+        });
+    }
+
+    function loadAllMovies(){
+        activeBtn('all-type-btn');
+
+        // The request parameters
+        var url = './get_movies_by_genre';
+        var params = 'genre=all-type';
+        var req = JSON.stringify({});
+
+        // display loading message
+        showLoadingMessage('Loading All Type...');
+
+        // make AJAX call
+        ajax('GET', url + '?' + params, req, (res) => {
+            var items = JSON.parse(res);
+
+            if (!items || items.length === 0) {
+                showWarningMessage('No comedies.');
+            } else {
+                listItems(items);
+            }
+        }, () => {
+            showErrorMessage('Cannot load commedies.');
+        });
+    }
+
+
     function loadComedies() {
         activeBtn('comedy-btn');
 
@@ -365,6 +434,43 @@
         }, () => {
             showErrorMessage('Cannot load actions.');
         });
+    }
+
+   
+
+    /**
+     * API #4 Toggle favorite (or visited) items
+     * 
+     * @param item_id -
+     *            The item business id
+     * 
+     * API end point: [POST]/[DELETE] /Dashi/history request json data: {
+     * user_id: 1111, visited: [a_list_of_business_ids] }
+     */
+    function changeFavoriteItem(item_id) {
+        // Check whether this item has been visited or not
+        var li = $('item-' + item_id);
+        var favIcon = $('fav-icon-' + item_id);
+        var favorite = li.dataset.favorite !== 'true';
+
+        // The request parameters
+        var url = './favorite';
+        var req = JSON.stringify({
+            user_id: user_id,
+            favorite: item_id
+        });
+        var method = favorite ? 'POST' : 'DELETE';
+
+        ajax(method, url, req,
+            // successful callback
+            function(res) {
+                var result = JSON.parse(res);
+
+                if (result.result === 'SUCCESS') {
+                    li.dataset.favorite = favorite;
+                    favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
+                }
+            });
     }
 
     function onShowMovies(movie_id)
