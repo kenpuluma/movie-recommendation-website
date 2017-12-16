@@ -35,15 +35,8 @@
         document.getElementById("logout-btn").onclick = function () {
             location.href = "logout";
         };
-    
-    
-        /**
-         * A helper function that makes a navigation button active
-         * 
-         * @param btnId -
-         *            The id of the navigation button
-         */
-         function getCurChosenMovieType()
+
+        function getCurChosenMovieType()
         {
             var btns = document.getElementsByClassName('main-nav-btn');
 
@@ -57,7 +50,14 @@
 
             return "all-type";
         } 
-
+    
+    
+        /**
+         * A helper function that makes a navigation button active
+         * 
+         * @param btnId -
+         *            The id of the navigation button
+         */
         function activeBtn(btnId) {
             var btns = document.getElementsByClassName('main-nav-btn');
     
@@ -213,7 +213,7 @@
                 showErrorMessage('Cannot load commedies.');
             });
         }
-
+        
         function loadComedies() {
             activeBtn('comedy-btn');
     
@@ -229,7 +229,7 @@
             // make AJAX call
             ajax('GET', url + '?' + params, req, (res) => {
                 var items = JSON.parse(res);
-                console.log(items);
+    
                 if (!items || items.length === 0) {
                     showWarningMessage('No comedies.');
                 } else {
@@ -434,7 +434,7 @@
     
             // The request parameters
             var user_id = $('user_id').innerHTML;
-            var url = './favorite';
+            var url = './add_to_fav';
             var req = JSON.stringify({
                 user_id: user_id,
                 favorite: item_id
