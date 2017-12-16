@@ -129,6 +129,29 @@ app.get('/get_movies_by_genre', async (req, res) => {
     try {
         const moviesList = await moviesAPI.getMovieByGenre(req.query.genre);
         if (moviesList) {
+        	var favoritesHis = {};
+
+	        if (req.query.user_id != undefined)
+	        {
+	        	const user = await usersAPI.getUserById(req.query.user_id);
+	        	for(var i = 0; i <= user.favorites.length; ++i)
+	        	{
+	        		var _id = user.favorites[i];
+	        		favoritesHis[_id] = true;
+	        	}
+	        }
+	        for(var i=0; i <= moviesList.length; ++i)
+	        {
+	        	if (moviesList[i] != undefined)
+	        	{
+		        	var movieID = moviesList[i]._id; 
+		        	if (movieID in favoritesHis)
+		        	{
+		        		moviesList[i].favorite = 'true';
+		        	}
+	        	}
+	        }
+
             var moviesJson = JSON.stringify(moviesList);
             res.send(moviesJson);
         }
@@ -141,7 +164,6 @@ app.post('/favorite', async (req, res) => {
     var user_id = req.body.user_id;
     var item_id = req.body.favorite;
     
-    console.log(req.body);
     try {
         await usersAPI.addFavorite(user_id, item_id);
         res.send({"result":"SUCCESS"});
@@ -154,7 +176,6 @@ app.delete('/favorite', async (req, res) => {
     var user_id = req.body.user_id;
     var item_id = req.body.favorite;
     
-    console.log(req.body);
     try {
         await usersAPI.removeFavorite(user_id, item_id);
         res.send({"result":"SUCCESS"});
