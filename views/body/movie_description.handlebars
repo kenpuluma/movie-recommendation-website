@@ -51,7 +51,7 @@
     <br/><span class="content">Main actors:</span>
     <span id="movie_actor" class="content">{{movie.actors}}</span>
     <br/><span class="content">Comments:</span>
-    <span id="movie_comments" class="content">{{movie.comments}}</span>
+    <span id="movie_comments" class="content">{{#each comments}} </br> ●{{this.content}}{{/each}}</span>
 </div>
 
 

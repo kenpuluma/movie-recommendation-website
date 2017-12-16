@@ -33,12 +33,8 @@
     <div class="info">
           <ul>
           <li>My Favorite film: {{#each user.favoriteObjects}} </br> ●{{this.title}}{{/each}}</li>
-          <li class="content">My Previous Comments: 
-                {{#user.comments}}
-                <p>Film: {{film_name}}</p> 
-                <p>My comments: {{comment}}</p>
-                <p class="time">Comment time: {{time}}</p>
-                {{/user.comments}}
+          <li class="content">My Previous Comments:
+              {{#each comments}} </br> ●{{this.content}}{{/each}}
           </li>
           </ul>
           <a href="/private" class="back">Back to Home Page</a>

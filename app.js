@@ -114,7 +114,11 @@ app.get('/show_movies_details', async (req, res) => {
 
             movie.avg_score = movie.avg_score * 12.4 + 'px';
 
-            res.render('body/movie_description', {user: req.user, movie: movie});
+            res.render('body/movie_description', {
+                user: req.user,
+                movie: movie,
+                comments: await commentsAPI.getCommentByMovieId(movie._id)
+            });
 
         }
     } catch (e) {
@@ -179,7 +183,7 @@ app.post('/login', passport.authenticate('local', {
 
 app.get('/private', (req, res) => {
     if (req.isAuthenticated()) res.render('body/private', {user: req.user});
-    else res.redirect('/');
+    else res.render('body/homepage', {message: req.flash("error")});
 });
 
 app.get('/search', (req, res) => {
@@ -204,7 +208,11 @@ app.get('/favorites', async (req, res) => {
         }
         req.user.favoriteObjects = moviesArray;
 
-        res.render('body/favorites', {user: req.user});
+        res.render('body/favorites', {
+            user: req.user,
+            comments: await commentsAPI.getCommentByUserId(req.user._id)
+        })
+        ;
     } else {
         res.redirect("/");
     }
@@ -213,15 +221,19 @@ app.get('/favorites', async (req, res) => {
 
 app.post('/comment_submit', async (req, res) => {
 
-    let score=parseInt(req.body.movie_score);
+    let score = parseInt(req.body.movie_score);
 
     try {
         const comment = await commentsAPI.addComment(req.user._id, req.body.movie_id, score, req.body.content);
         const movie = await moviesAPI.addComment(req.body.movie_id, comment._id);
         const user = await usersAPI.addComment(req.user._id, comment._id);
-        res.render('body/movie_description', {movie: movie, user: user});
+        res.render('body/movie_description', {
+            movie: movie,
+            user: user,
+            comments: await commentsAPI.getCommentByMovieId(movie._id)
+        });
     }
-    catch (e){
+    catch (e) {
         res.redirect("/");
     }
 });
