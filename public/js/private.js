@@ -12,6 +12,8 @@
                 // alert('User clicked on "foo."');
              //  });
             // Register event listeners
+            $('all-type-btn').addEventListener('click', loadAllMovies);
+            $('search-btn').addEventListener('click', onSearchMovies);
             $('comedy-btn').addEventListener('click', loadComedies);
             $('disaster-btn').addEventListener('click', loadDisasters);
             $('crime-btn').addEventListener('click', loadCrimes);
@@ -41,6 +43,21 @@
          * @param btnId -
          *            The id of the navigation button
          */
+         function getCurChosenMovieType()
+        {
+            var btns = document.getElementsByClassName('main-nav-btn');
+
+            // deactivate all navigation buttons
+            for (var i = 0; i < btns.length; i++) {
+                if (btns[i].className.indexOf('active') >= 0)
+                {
+                    return btns[i].getAttribute('tag');
+                }
+            }
+
+            return "all-type";
+        } 
+
         function activeBtn(btnId) {
             var btns = document.getElementsByClassName('main-nav-btn');
     
@@ -147,7 +164,56 @@
         // -------------------------------------
         // AJAX call server-side APIs
         // -------------------------------------
-        
+        function onSearchMovies()
+        {
+            // The request parameters
+            var url = './search_movies_by_genre';
+            var keyWord = $('key_word').value;
+            var params = 'genre=' + getCurChosenMovieType() + '&key_word=' + keyWord;
+            var req = JSON.stringify({});
+
+            // display loading message
+            showLoadingMessage('Searching the movies');
+
+            // make AJAX call
+            ajax('GET', url + '?' + params, req, (res) => {
+                var items = JSON.parse(res);
+
+                if (!items || items.length === 0) {
+                    showWarningMessage('No comedies.');
+                } else {
+                    listItems(items);
+                }
+            }, () => {
+                showErrorMessage('Cannot load commedies.');
+            });
+        }
+
+        function loadAllMovies(){
+            activeBtn('all-type-btn');
+
+            // The request parameters
+            var url = './get_movies_by_genre';
+            var params = 'genre=all-type';
+            var req = JSON.stringify({});
+
+            // display loading message
+            showLoadingMessage('Loading All Type...');
+
+            // make AJAX call
+            ajax('GET', url + '?' + params, req, (res) => {
+                var items = JSON.parse(res);
+
+                if (!items || items.length === 0) {
+                    showWarningMessage('No comedies.');
+                } else {
+                    listItems(items);
+                }
+            }, () => {
+                showErrorMessage('Cannot load commedies.');
+            });
+        }
+
         function loadComedies() {
             activeBtn('comedy-btn');
     
@@ -163,7 +229,7 @@
             // make AJAX call
             ajax('GET', url + '?' + params, req, (res) => {
                 var items = JSON.parse(res);
-    
+                console.log(items);
                 if (!items || items.length === 0) {
                     showWarningMessage('No comedies.');
                 } else {
@@ -368,7 +434,7 @@
     
             // The request parameters
             var user_id = $('user_id').innerHTML;
-            var url = './add_to_fav';
+            var url = './favorite';
             var req = JSON.stringify({
                 user_id: user_id,
                 favorite: item_id
