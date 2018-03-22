@@ -1,2 +1,2 @@
-# cs546-project
-# This is a movie recommendation website.
+# This is a movie recommendation website based on Node.js Express and MongoDB.
+
